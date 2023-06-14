@@ -1,15 +1,11 @@
 package fr.properties.rentpropertiesapi.domain;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "rental_property")
 @Data
-@AllArgsConstructor
-@NoArgsConstructor
 public class RentalPropertyEntity {
 
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -47,15 +43,15 @@ public class RentalPropertyEntity {
 
     @Basic
     @Column(name = "number_of_bedrooms")
-    private Integer numberOfBedrooms;
+    private int numberOfBedrooms;
 
     @Basic
     @Column(name = "floor_number")
-    private Integer floorNumber;
+    private int floorNumber;
 
     @Basic
     @Column(name = "number_of_floors")
-    private Integer numberOfFloors;
+    private int numberOfFloors;
 
     @Basic
     @Column(name = "construction_year", length = 4)
@@ -67,17 +63,94 @@ public class RentalPropertyEntity {
 
     @Basic
     @Column(name = "has_elevator")
-    private Boolean hasElevator;
+    private boolean hasElevator;
 
     @Basic
     @Column(name = "has_intercom")
-    private Boolean hasIntercom;
+    private boolean hasIntercom;
 
     @Basic
     @Column(name = "has_balcony")
-    private Boolean hasBalcony;
+    private boolean hasBalcony;
 
     @Basic
     @Column(name = "has_parking_space")
-    private Boolean hasParkingSpace;
+    private boolean hasParkingSpace;
+
+    public RentalPropertyEntity() {
+    }
+
+    public RentalPropertyEntity(
+            int id,
+            String description,
+            String town,
+            String address,
+            PropertyTypeEntity propertyType,
+            double rentAmount,
+            double securityDepositAmount,
+            double area,
+            Integer numberOfBedrooms,
+            Integer floorNumber,
+            Integer numberOfFloors,
+            String constructionYear,
+            EnergyClassificationEntity energyClassification,
+            Boolean hasElevator,
+            Boolean hasIntercom,
+            Boolean hasBalcony,
+            Boolean hasParkingSpace
+    ) {
+        this.id = id;
+        this.description = description;
+        this.town = town;
+        this.address = address;
+        this.propertyType = propertyType;
+        this.rentAmount = rentAmount;
+        this.securityDepositAmount = securityDepositAmount;
+        this.area = area;
+        this.numberOfBedrooms = numberOfBedrooms;
+        this.floorNumber = floorNumber;
+        this.numberOfFloors = numberOfFloors;
+        this.constructionYear = constructionYear;
+        this.energyClassification = energyClassification;
+        this.hasElevator = hasElevator;
+        this.hasIntercom = hasIntercom;
+        this.hasBalcony = hasBalcony;
+        this.hasParkingSpace = hasParkingSpace;
+    }
+
+    public RentalPropertyEntity(
+            String description,
+            String town,
+            String address,
+            PropertyTypeEntity propertyType,
+            double rentAmount,
+            double securityDepositAmount,
+            double area,
+            Integer numberOfBedrooms,
+            Integer floorNumber,
+            Integer numberOfFloors,
+            String constructionYear,
+            EnergyClassificationEntity energyClassification,
+            Boolean hasElevator,
+            Boolean hasIntercom,
+            Boolean hasBalcony,
+            Boolean hasParkingSpace
+    ) {
+        this.description = description;
+        this.town = town;
+        this.address = address;
+        this.propertyType = propertyType;
+        this.rentAmount = rentAmount;
+        this.securityDepositAmount = securityDepositAmount;
+        this.area = area;
+        this.numberOfBedrooms = numberOfBedrooms;
+        this.floorNumber = floorNumber;
+        this.numberOfFloors = numberOfFloors;
+        this.constructionYear = constructionYear;
+        this.energyClassification = energyClassification;
+        this.hasElevator = hasElevator;
+        this.hasIntercom = hasIntercom;
+        this.hasBalcony = hasBalcony;
+        this.hasParkingSpace = hasParkingSpace;
+    }
 }

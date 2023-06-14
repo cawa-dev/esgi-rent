@@ -6,7 +6,7 @@
 
     <changeSet id="create_rental_property" author="esgi-rent">
         <createTable tableName="rental_property">
-            <column name="id" type="INT">
+            <column name="id" type="INT" autoIncrement="true">
                 <constraints primaryKey="true" nullable="false" />
             </column>
             <column name="description" type="VARCHAR(200)">
@@ -62,7 +62,7 @@
 
     <changeSet id="create_property_type" author="esgi-rent">
         <createTable tableName="property_type">
-            <column name="id" type="INT">
+            <column name="id" type="INT" autoIncrement="true">
                 <constraints primaryKey="true" nullable="false" />
             </column>
             <column name="designation" type="VARCHAR(5)">
@@ -73,11 +73,11 @@
 
     <changeSet id="create_energy_classification" author="esgi-rent">
         <createTable tableName="energy_classification">
-            <column name="id" type="INT">
-                <constraints primaryKey="true" nullable="false" />
+            <column name="id" type="INT" autoIncrement="true">
+                <constraints primaryKey="true" />
             </column>
             <column name="designation" type="CHAR(1)">
-                <constraints nullable="false" />
+                <constraints nullable="true" />
             </column>
         </createTable>
     </changeSet>

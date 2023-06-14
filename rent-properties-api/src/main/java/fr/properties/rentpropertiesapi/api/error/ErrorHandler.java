@@ -3,6 +3,7 @@ package fr.properties.rentpropertiesapi.api.error;
 import fr.properties.rentpropertiesapi.dto.error.ErrorDto;
 import fr.properties.rentpropertiesapi.exception.NotFoundRentalPropertyException;
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -14,5 +15,11 @@ public class ErrorHandler {
     @ExceptionHandler(NotFoundRentalPropertyException.class)
     public ErrorDto handleNotFoundRentalPropertyException(NotFoundRentalPropertyException notFoundRentalPropertyException) {
         return new ErrorDto(notFoundRentalPropertyException.getMessage());
+    }
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ErrorDto handleMethodArgumentNotValidException() {
+        return new ErrorDto("La requête envoyée est invalide");
     }
 }

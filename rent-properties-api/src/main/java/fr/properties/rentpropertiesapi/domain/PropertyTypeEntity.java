@@ -1,15 +1,11 @@
 package fr.properties.rentpropertiesapi.domain;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "property_type")
 @Data
-@AllArgsConstructor
-@NoArgsConstructor
 public class PropertyTypeEntity {
 
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -20,4 +16,16 @@ public class PropertyTypeEntity {
     @Basic
     @Column(name = "designation", nullable = false, length = 5)
     private String designation;
+
+    public PropertyTypeEntity() {
+    }
+
+    public PropertyTypeEntity(int id, String designation) {
+        this.id = id;
+        this.designation = designation;
+    }
+
+    public PropertyTypeEntity(String designation) {
+        this.designation = designation;
+    }
 }
