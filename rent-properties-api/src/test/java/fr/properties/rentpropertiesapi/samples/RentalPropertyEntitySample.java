@@ -10,11 +10,10 @@ public class RentalPropertyEntitySample {
 
     public static RentalPropertyEntity oneRentalPropertyEntity() {
         return new RentalPropertyEntity(
-                1,
                 "Appartement spacieux avec vue sur l'ESGI",
                 "Paris",
                 "77 Rue des roses",
-                new PropertyTypeEntity(1, "Appartement"),
+                new PropertyTypeEntity("Appartement"),
                 750.90,
                 1200.90,
                 37.48,
@@ -22,7 +21,7 @@ public class RentalPropertyEntitySample {
                 1,
                 3,
                 "1990",
-                new EnergyClassificationEntity(1, "B"),
+                new EnergyClassificationEntity("B"),
                 false,
                 false,
                 true,

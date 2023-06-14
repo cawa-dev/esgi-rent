@@ -3,10 +3,12 @@ package fr.properties.rentpropertiesapi.mapper;
 import java.util.List;
 
 import fr.properties.rentpropertiesapi.domain.RentalPropertyEntity;
+import fr.properties.rentpropertiesapi.dto.request.RentalPropertyRequestDto;
 import fr.properties.rentpropertiesapi.dto.response.RentalPropertyResponseDto;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import static fr.properties.rentpropertiesapi.samples.RentalPropertyDtoSample.oneRentalPropertyRequest;
 import static fr.properties.rentpropertiesapi.samples.RentalPropertyDtoSample.oneRentalPropertyResponse;
 import static fr.properties.rentpropertiesapi.samples.RentalPropertyEntitySample.oneRentalPropertyEntity;
 import static fr.properties.rentpropertiesapi.samples.RentalPropertyEntitySample.rentalPropertyEntities;
@@ -20,6 +22,19 @@ class RentalPropertyDtoMapperTest {
     @BeforeEach
     void setUp() {
         rentalPropertyDtoMapper = new RentalPropertyDtoMapper();
+    }
+
+    @Test
+    void shouldMapEntity() {
+        // GIVEN
+        RentalPropertyRequestDto rentalPropertyRequest = oneRentalPropertyRequest();
+        RentalPropertyEntity expectedRentalPropertyEntity = oneRentalPropertyEntity();
+
+        // WHEN
+        RentalPropertyEntity rentalPropertyEntity = rentalPropertyDtoMapper.mapToEntity(rentalPropertyRequest);
+
+        // THEN
+        assertThat(rentalPropertyEntity).isEqualTo(expectedRentalPropertyEntity);
     }
 
     @Test

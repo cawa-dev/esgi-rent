@@ -2,9 +2,31 @@ package fr.properties.rentpropertiesapi.samples;
 
 import java.util.List;
 
+import fr.properties.rentpropertiesapi.dto.request.RentalPropertyRequestDto;
 import fr.properties.rentpropertiesapi.dto.response.RentalPropertyResponseDto;
 
 public class RentalPropertyDtoSample {
+
+    public static RentalPropertyRequestDto oneRentalPropertyRequest() {
+        return RentalPropertyRequestDto.builder()
+                .description("Appartement spacieux avec vue sur l'ESGI")
+                .town("Paris")
+                .address("77 Rue des roses")
+                .propertyType("Appartement")
+                .rentAmount(750.90)
+                .securityDepositAmount(1200.90)
+                .area(37.48)
+                .numberOfBedrooms(2)
+                .floorNumber(1)
+                .numberOfFloors(3)
+                .constructionYear("1990")
+                .energyClassification("B")
+                .hasElevator(false)
+                .hasIntercom(false)
+                .hasBalcony(true)
+                .hasParkingSpace(false)
+                .build();
+    }
 
     public static RentalPropertyResponseDto oneRentalPropertyResponse() {
         return RentalPropertyResponseDto.builder()
