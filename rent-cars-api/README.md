@@ -4,4 +4,4 @@
 
 # - Pas de difficultés
 
-# - Fonctionnalités complète
+# - Fonctionnalités complètes

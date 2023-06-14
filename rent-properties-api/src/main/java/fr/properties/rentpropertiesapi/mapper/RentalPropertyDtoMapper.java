@@ -2,8 +2,8 @@ package fr.properties.rentpropertiesapi.mapper;
 
 import java.util.List;
 
+import fr.properties.rentpropertiesapi.domain.RentalPropertyEntity;
 import fr.properties.rentpropertiesapi.dto.response.RentalPropertyResponseDto;
-import fr.properties.rentpropertiesapi.entities.RentalPropertyEntity;
 import org.springframework.stereotype.Component;
 
 @Component

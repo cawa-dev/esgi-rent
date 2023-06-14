@@ -2,8 +2,9 @@ package fr.properties.rentpropertiesapi.mapper;
 
 import java.util.List;
 
+import fr.properties.rentpropertiesapi.domain.RentalPropertyEntity;
 import fr.properties.rentpropertiesapi.dto.response.RentalPropertyResponseDto;
-import fr.properties.rentpropertiesapi.entities.RentalPropertyEntity;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static fr.properties.rentpropertiesapi.samples.RentalPropertyDtoSample.oneRentalPropertyResponse;
@@ -14,6 +15,13 @@ import static org.assertj.core.api.Assertions.tuple;
 
 class RentalPropertyDtoMapperTest {
 
+    private RentalPropertyDtoMapper rentalPropertyDtoMapper;
+
+    @BeforeEach
+    void setUp() {
+        rentalPropertyDtoMapper = new RentalPropertyDtoMapper();
+    }
+
     @Test
     void shouldMapToDto() {
         // GIVEN
@@ -21,8 +29,6 @@ class RentalPropertyDtoMapperTest {
         RentalPropertyResponseDto expectedRentalPropertyResponseDto = oneRentalPropertyResponse();
 
         // WHEN
-        RentalPropertyDtoMapper rentalPropertyDtoMapper = new RentalPropertyDtoMapper();
-
         RentalPropertyResponseDto rentalPropertyResponseDto = rentalPropertyDtoMapper.mapToDto(rentalPropertyEntity);
 
         // THEN
@@ -35,8 +41,6 @@ class RentalPropertyDtoMapperTest {
         List<RentalPropertyEntity> rentalPropertyEntities = rentalPropertyEntities();
 
         // WHEN
-        RentalPropertyDtoMapper rentalPropertyDtoMapper = new RentalPropertyDtoMapper();
-
         List<RentalPropertyResponseDto> rentalPropertyResponseList = rentalPropertyDtoMapper.mapToDtoList(rentalPropertyEntities);
 
         // THEN

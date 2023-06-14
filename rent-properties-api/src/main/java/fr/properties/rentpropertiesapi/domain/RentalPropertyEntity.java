@@ -1,4 +1,4 @@
-package fr.properties.rentpropertiesapi.entities;
+package fr.properties.rentpropertiesapi.domain;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
