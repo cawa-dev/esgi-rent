@@ -1,11 +1,15 @@
 package fr.properties.rentpropertiesapi.entities;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "energy_classification")
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class EnergyClassificationEntity {
 
     @GeneratedValue(strategy = GenerationType.IDENTITY)
