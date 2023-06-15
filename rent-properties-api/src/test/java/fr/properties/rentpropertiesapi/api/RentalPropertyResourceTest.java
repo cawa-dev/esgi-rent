@@ -1,7 +1,5 @@
 package fr.properties.rentpropertiesapi.api;
 
-import java.util.List;
-
 import fr.properties.rentpropertiesapi.dto.request.RentalPropertyRequestDto;
 import fr.properties.rentpropertiesapi.dto.request.patch.RentalPropertyRequestDtoPatch;
 import fr.properties.rentpropertiesapi.dto.response.RentalPropertyResponseDto;
@@ -13,6 +11,8 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.core.io.Resource;
 import org.springframework.test.web.servlet.MockMvc;
+
+import java.util.List;
 
 import static fr.properties.rentpropertiesapi.samples.RentalPropertyDtoSample.*;
 import static fr.properties.rentpropertiesapi.utils.TestUtils.readResource;

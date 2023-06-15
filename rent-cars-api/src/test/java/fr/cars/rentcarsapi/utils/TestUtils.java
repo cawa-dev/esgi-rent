@@ -1,4 +1,4 @@
-package fr.properties.rentpropertiesapi.utils;
+package fr.cars.rentcarsapi.utils;
 
 import org.springframework.core.io.Resource;
 

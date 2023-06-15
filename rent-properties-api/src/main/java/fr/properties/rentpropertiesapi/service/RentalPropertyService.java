@@ -1,43 +1,43 @@
 package fr.properties.rentpropertiesapi.service;
 
-import java.util.List;
-import java.util.Optional;
-
 import fr.properties.rentpropertiesapi.domain.PropertyTypeEntity;
 import fr.properties.rentpropertiesapi.domain.RentalPropertyEntity;
 import fr.properties.rentpropertiesapi.dto.request.RentalPropertyRequestDto;
 import fr.properties.rentpropertiesapi.dto.request.patch.RentalPropertyRequestDtoPatch;
 import fr.properties.rentpropertiesapi.dto.response.RentalPropertyResponseDto;
 import fr.properties.rentpropertiesapi.exception.NotFoundRentalPropertyException;
-import fr.properties.rentpropertiesapi.mapper.RentalPropertyDtoMapper;
+import fr.properties.rentpropertiesapi.mapper.RentalPropertyMapper;
 import fr.properties.rentpropertiesapi.repository.RentalPropertyRepository;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.Optional;
+
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class RentalPropertyService {
 
     private final RentalPropertyRepository rentalPropertyRepository;
-    private final RentalPropertyDtoMapper rentalPropertyDtoMapper;
+    private final RentalPropertyMapper rentalPropertyMapper;
 
 
     public List<RentalPropertyResponseDto> getRentalProperties() {
         List<RentalPropertyEntity> rentalProperties = rentalPropertyRepository.findAll();
 
-        return rentalPropertyDtoMapper.mapToDtoList(rentalProperties);
+        return rentalPropertyMapper.mapToDtoList(rentalProperties);
     }
 
 
     public RentalPropertyResponseDto getRentalProperty(int id) {
         return rentalPropertyRepository.findById(id)
-                .map(rentalPropertyDtoMapper::mapToDto)
+                .map(rentalPropertyMapper::mapToDto)
                 .orElseThrow(() -> new NotFoundRentalPropertyException("Le bien immobilier avec l'id : " + id + " est introuvable"));
     }
 
 
     public void createRentalProperty(RentalPropertyRequestDto rentalPropertyRequestDto) {
-        RentalPropertyEntity rentalPropertyEntity = rentalPropertyDtoMapper.mapToEntity(rentalPropertyRequestDto);
+        RentalPropertyEntity rentalPropertyEntity = rentalPropertyMapper.mapToEntity(rentalPropertyRequestDto);
 
         rentalPropertyRepository.save(rentalPropertyEntity);
     }
@@ -57,7 +57,7 @@ public class RentalPropertyService {
 
             rentalPropertyRepository.save(existingRentalProperty);
         } else {
-            RentalPropertyEntity newRentalProperty = rentalPropertyDtoMapper.mapToEntity(rentalPropertyRequestDto);
+            RentalPropertyEntity newRentalProperty = rentalPropertyMapper.mapToEntity(rentalPropertyRequestDto);
 
             rentalPropertyRepository.save(newRentalProperty);
         }

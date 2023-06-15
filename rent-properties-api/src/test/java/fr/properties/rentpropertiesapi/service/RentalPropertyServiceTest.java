@@ -1,14 +1,11 @@
 package fr.properties.rentpropertiesapi.service;
 
-import java.util.List;
-import java.util.Optional;
-
 import fr.properties.rentpropertiesapi.domain.RentalPropertyEntity;
 import fr.properties.rentpropertiesapi.dto.request.RentalPropertyRequestDto;
 import fr.properties.rentpropertiesapi.dto.request.patch.RentalPropertyRequestDtoPatch;
 import fr.properties.rentpropertiesapi.dto.response.RentalPropertyResponseDto;
 import fr.properties.rentpropertiesapi.exception.NotFoundRentalPropertyException;
-import fr.properties.rentpropertiesapi.mapper.RentalPropertyDtoMapper;
+import fr.properties.rentpropertiesapi.mapper.RentalPropertyMapper;
 import fr.properties.rentpropertiesapi.repository.RentalPropertyRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -16,6 +13,9 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+
+import java.util.List;
+import java.util.Optional;
 
 import static fr.properties.rentpropertiesapi.samples.RentalPropertyDtoSample.*;
 import static fr.properties.rentpropertiesapi.samples.RentalPropertyEntitySample.oneRentalPropertyEntity;
@@ -32,7 +32,7 @@ class RentalPropertyServiceTest {
     RentalPropertyService rentalPropertyService;
 
     @Mock
-    RentalPropertyDtoMapper rentalPropertyDtoMapper;
+    RentalPropertyMapper rentalPropertyMapper;
 
     @Mock
     RentalPropertyRepository rentalPropertyRepository;
@@ -45,7 +45,7 @@ class RentalPropertyServiceTest {
 
         // WHEN
         when(rentalPropertyRepository.findAll()).thenReturn(rentalPropertyEntityList);
-        when(rentalPropertyDtoMapper.mapToDtoList(rentalPropertyEntityList)).thenReturn(rentalPropertyResponseList);
+        when(rentalPropertyMapper.mapToDtoList(rentalPropertyEntityList)).thenReturn(rentalPropertyResponseList);
 
         List<RentalPropertyResponseDto> rentalProperties = rentalPropertyService.getRentalProperties();
 
@@ -54,8 +54,8 @@ class RentalPropertyServiceTest {
                 .usingRecursiveComparison()
                 .isEqualTo(rentalPropertyResponseList);
         verify(rentalPropertyRepository).findAll();
-        verify(rentalPropertyDtoMapper).mapToDtoList(rentalPropertyEntityList);
-        verifyNoMoreInteractions(rentalPropertyRepository, rentalPropertyDtoMapper);
+        verify(rentalPropertyMapper).mapToDtoList(rentalPropertyEntityList);
+        verifyNoMoreInteractions(rentalPropertyRepository, rentalPropertyMapper);
     }
 
     @Test
@@ -67,7 +67,7 @@ class RentalPropertyServiceTest {
 
         // WHEN
         when(rentalPropertyRepository.findById(id)).thenReturn(Optional.of(rentalPropertyEntity));
-        when(rentalPropertyDtoMapper.mapToDto(rentalPropertyEntity)).thenReturn(rentalPropertyResponse);
+        when(rentalPropertyMapper.mapToDto(rentalPropertyEntity)).thenReturn(rentalPropertyResponse);
 
         RentalPropertyResponseDto rentalProperty = rentalPropertyService.getRentalProperty(id);
 
@@ -76,8 +76,8 @@ class RentalPropertyServiceTest {
                 .usingRecursiveComparison()
                 .isEqualTo(rentalPropertyResponse);
         verify(rentalPropertyRepository).findById(id);
-        verify(rentalPropertyDtoMapper).mapToDto(rentalPropertyEntity);
-        verifyNoMoreInteractions(rentalPropertyRepository, rentalPropertyDtoMapper);
+        verify(rentalPropertyMapper).mapToDto(rentalPropertyEntity);
+        verifyNoMoreInteractions(rentalPropertyRepository, rentalPropertyMapper);
     }
 
     @Test
@@ -93,7 +93,7 @@ class RentalPropertyServiceTest {
         assertThatExceptionOfType(NotFoundRentalPropertyException.class)
                 .isThrownBy(() -> rentalPropertyService.getRentalProperty(id))
                 .withMessage(throwable.getMessage());
-        verifyNoInteractions(rentalPropertyDtoMapper);
+        verifyNoInteractions(rentalPropertyMapper);
     }
 
     @Test
@@ -103,15 +103,15 @@ class RentalPropertyServiceTest {
         RentalPropertyEntity rentalPropertyEntity = oneRentalPropertyEntity();
 
         // WHEN
-        when(rentalPropertyDtoMapper.mapToEntity(rentalPropertyRequestDto)).thenReturn(rentalPropertyEntity);
+        when(rentalPropertyMapper.mapToEntity(rentalPropertyRequestDto)).thenReturn(rentalPropertyEntity);
         when(rentalPropertyRepository.save(rentalPropertyEntity)).thenReturn(rentalPropertyEntity);
 
         rentalPropertyService.createRentalProperty(rentalPropertyRequestDto);
 
         // THEN
-        verify(rentalPropertyDtoMapper).mapToEntity(rentalPropertyRequestDto);
+        verify(rentalPropertyMapper).mapToEntity(rentalPropertyRequestDto);
         verify(rentalPropertyRepository).save(rentalPropertyEntity);
-        verifyNoMoreInteractions(rentalPropertyDtoMapper, rentalPropertyRepository);
+        verifyNoMoreInteractions(rentalPropertyMapper, rentalPropertyRepository);
     }
 
     @Test
@@ -149,7 +149,7 @@ class RentalPropertyServiceTest {
 
         // WHEN
         when(rentalPropertyRepository.findById(id)).thenReturn(Optional.empty());
-        when(rentalPropertyDtoMapper.mapToEntity(rentalPropertyRequestDto)).thenReturn(newRentalProperty);
+        when(rentalPropertyMapper.mapToEntity(rentalPropertyRequestDto)).thenReturn(newRentalProperty);
 
         rentalPropertyService.updateRentalProperty(id, rentalPropertyRequestDto);
 
@@ -211,6 +211,5 @@ class RentalPropertyServiceTest {
         //THEN
         verify(rentalPropertyRepository).deleteById(id);
         verifyNoMoreInteractions(rentalPropertyRepository);
-
     }
 }

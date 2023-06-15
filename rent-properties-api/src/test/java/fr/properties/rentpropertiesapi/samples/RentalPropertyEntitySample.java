@@ -1,10 +1,10 @@
 package fr.properties.rentpropertiesapi.samples;
 
-import java.util.List;
-
 import fr.properties.rentpropertiesapi.domain.EnergyClassificationEntity;
 import fr.properties.rentpropertiesapi.domain.PropertyTypeEntity;
 import fr.properties.rentpropertiesapi.domain.RentalPropertyEntity;
+
+import java.util.List;
 
 public class RentalPropertyEntitySample {
 
