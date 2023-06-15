@@ -1,6 +1,7 @@
 package fr.cars.rentcarsapi.api;
 
 import fr.cars.rentcarsapi.dto.request.RentalCarRequestDto;
+import fr.cars.rentcarsapi.dto.request.patch.RentalCarRequestDtoPatch;
 import fr.cars.rentcarsapi.dto.response.RentalCarResponseDto;
 import fr.cars.rentcarsapi.service.RentalCarService;
 import org.junit.jupiter.api.Test;
@@ -33,8 +34,14 @@ class RentalCarResourceTest {
     @Value("classpath:/json/rentalCarRequest.json")
     Resource rentalCarRequest;
 
+    @Value("classpath:/json/rentalCarRequestPatch.json")
+    Resource rentalCarRequestPatch;
+
     @Value("classpath:/json/invalidRentalCarRequest.json")
     Resource invalidRentalCarRequest;
+
+    @Value("classpath:/json/invalidRentalCarRequestPatch.json")
+    Resource invalidRentalCarRequestPatch;
 
     @Autowired
     MockMvc mockMvc;
@@ -126,5 +133,38 @@ class RentalCarResourceTest {
         // THEN
         verify(rentalCarService).updateRentalCar(id, rentalCarRequestDto);
         verifyNoMoreInteractions(rentalCarService);
+    }
+
+    @Test
+    void shouldPatchRentalCar() throws Exception {
+        // GIVEN
+        int id = 1;
+        RentalCarRequestDtoPatch rentalCarRequestDtoPatch = oneRentalCarPatchRequest();
+
+        // WHEN
+        mockMvc.perform(patch("/rent-cars-api/rental-cars/{id}", id)
+                        .contentType(APPLICATION_JSON_VALUE)
+                        .content(readResource(rentalCarRequestPatch)))
+                .andExpect(status().isOk());
+
+        // THEN
+        verify(rentalCarService).patchRentalCar(id, rentalCarRequestDtoPatch);
+        verifyNoMoreInteractions(rentalCarService);
+    }
+
+    @Test
+    void shouldReturnBadRequestWhenSendInvalidRequestBodyToPatchRentalCar() throws Exception {
+        // GIVEN
+        int id = 0;
+
+        // WHEN
+        mockMvc.perform(patch("/rent-cars-api/rental-cars/{id}", id)
+                        .contentType(APPLICATION_JSON_VALUE)
+                        .content(readResource(invalidRentalCarRequestPatch)))
+                .andExpect(status().isBadRequest())
+                .andExpect(content().json("{\"message\": \"La requête envoyée est invalide\"}"));
+
+        // THEN
+        verifyNoInteractions(rentalCarService);
     }
 }

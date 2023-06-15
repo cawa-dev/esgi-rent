@@ -1,6 +1,7 @@
 package fr.cars.rentcarsapi.api;
 
 import fr.cars.rentcarsapi.dto.request.RentalCarRequestDto;
+import fr.cars.rentcarsapi.dto.request.patch.RentalCarRequestDtoPatch;
 import fr.cars.rentcarsapi.dto.response.RentalCarResponseDto;
 import fr.cars.rentcarsapi.service.RentalCarService;
 import jakarta.validation.Valid;
@@ -42,5 +43,14 @@ public class RentalCarResource {
             @PathVariable int id
     ) {
         rentalCarService.updateRentalCar(id, rentalCarRequestDto);
+    }
+
+    @PatchMapping("/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public void patchRentalCar(
+            @RequestBody @Valid RentalCarRequestDtoPatch rentalCarRequestDtoPatch,
+            @PathVariable int id
+    ) {
+        rentalCarService.patchRentalCar(id, rentalCarRequestDtoPatch);
     }
 }

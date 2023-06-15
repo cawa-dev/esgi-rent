@@ -1,11 +1,18 @@
 package fr.cars.rentcarsapi.samples;
 
 import fr.cars.rentcarsapi.dto.request.RentalCarRequestDto;
+import fr.cars.rentcarsapi.dto.request.patch.RentalCarRequestDtoPatch;
 import fr.cars.rentcarsapi.dto.response.RentalCarResponseDto;
 
 import java.util.List;
 
 public class RentalCarDtoSample {
+
+    public static RentalCarRequestDtoPatch oneRentalCarPatchRequest() {
+        return RentalCarRequestDtoPatch.builder()
+                .rentAmount(1000.0)
+                .build();
+    }
 
     public static RentalCarRequestDto oneRentalCarRequest() {
         return RentalCarRequestDto.builder()

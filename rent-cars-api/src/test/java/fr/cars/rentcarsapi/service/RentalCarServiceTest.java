@@ -2,12 +2,14 @@ package fr.cars.rentcarsapi.service;
 
 import fr.cars.rentcarsapi.domain.RentalCarEntity;
 import fr.cars.rentcarsapi.dto.request.RentalCarRequestDto;
+import fr.cars.rentcarsapi.dto.request.patch.RentalCarRequestDtoPatch;
 import fr.cars.rentcarsapi.dto.response.RentalCarResponseDto;
 import fr.cars.rentcarsapi.exception.NotFoundRentalCarException;
 import fr.cars.rentcarsapi.mapper.RentalCarMapper;
 import fr.cars.rentcarsapi.repository.RentalCarRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -20,6 +22,7 @@ import static fr.cars.rentcarsapi.samples.RentalCarEntitySample.oneRentalCarEnti
 import static fr.cars.rentcarsapi.samples.RentalCarEntitySample.rentalCarEntities;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
+import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -152,6 +155,47 @@ class RentalCarServiceTest {
         // THEN
         verify(rentalCarRepository, times(1)).findById(id);
         verify(rentalCarRepository, times(1)).save(any(RentalCarEntity.class));
+        verifyNoMoreInteractions(rentalCarRepository);
+    }
+
+    @Test
+    void shouldPatchRentAmountOnExistingRentalCar() {
+        // GIVEN
+        int id = 1;
+        RentalCarRequestDtoPatch carRequestDtoPatch = oneRentalCarPatchRequest();
+        RentalCarEntity rentalCarEntity = oneRentalCarEntity();
+
+        given(rentalCarRepository.findById(id)).willReturn(Optional.of(rentalCarEntity));
+        ArgumentCaptor<RentalCarEntity> captor = ArgumentCaptor.forClass(RentalCarEntity.class);
+
+        // WHEN
+        rentalCarService.patchRentalCar(id, carRequestDtoPatch);
+
+        // THEN
+        verify(rentalCarRepository, times(1)).findById(id);
+        verify(rentalCarRepository, times(1)).save(captor.capture());
+
+        var savedRentalCar = captor.getValue();
+        assertThat(savedRentalCar).isNotNull();
+        assertThat(savedRentalCar.getRentAmount()).isEqualTo(1000.0);
+
+        verifyNoMoreInteractions(rentalCarRepository);
+    }
+
+    @Test
+    void shouldThrowNotFoundRentalCarExceptionWhenRentalCarIsNotFoundAndIsTryingToBePatch() {
+        // GIVEN
+        int id = 9999;
+        var throwable = new NotFoundRentalCarException("Le véhicule avec l'id : " + id + " est introuvable");
+        RentalCarRequestDtoPatch carRequestDtoPatch = oneRentalCarPatchRequest();
+
+        // WHEN
+        when(rentalCarRepository.findById(id)).thenThrow(throwable);
+
+        // THEN
+        assertThatExceptionOfType(NotFoundRentalCarException.class)
+                .isThrownBy(() -> rentalCarService.patchRentalCar(id, carRequestDtoPatch))
+                .withMessage(throwable.getMessage());
         verifyNoMoreInteractions(rentalCarRepository);
     }
 }

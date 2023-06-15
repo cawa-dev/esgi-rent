@@ -2,6 +2,7 @@ package fr.cars.rentcarsapi.service;
 
 import fr.cars.rentcarsapi.domain.RentalCarEntity;
 import fr.cars.rentcarsapi.dto.request.RentalCarRequestDto;
+import fr.cars.rentcarsapi.dto.request.patch.RentalCarRequestDtoPatch;
 import fr.cars.rentcarsapi.dto.response.RentalCarResponseDto;
 import fr.cars.rentcarsapi.exception.NotFoundRentalCarException;
 import fr.cars.rentcarsapi.mapper.RentalCarMapper;
@@ -57,5 +58,14 @@ public class RentalCarService {
 
             rentalCarRepository.save(newRentalCar);
         }
+    }
+
+    public void patchRentalCar(int id, RentalCarRequestDtoPatch carRequestDtoPatch) {
+        RentalCarEntity rentalCar = rentalCarRepository.findById(id)
+                .orElseThrow(() -> new NotFoundRentalCarException("Le véhicule avec l'id : " + id + " est introuvable"));
+
+        rentalCar.setRentAmount(carRequestDtoPatch.rentAmount());
+
+        rentalCarRepository.save(rentalCar);
     }
 }
