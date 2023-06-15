@@ -16,4 +16,4 @@ spring:
     enabled: true
   docker:
     compose:
-      file: rent-properties-api/docker-compose.yaml
+      file: docker-compose.yaml
