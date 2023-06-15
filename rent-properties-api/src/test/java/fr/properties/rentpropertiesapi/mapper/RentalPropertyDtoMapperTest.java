@@ -17,7 +17,7 @@ import static org.assertj.core.api.Assertions.tuple;
 
 class RentalPropertyDtoMapperTest {
 
-    private RentalPropertyDtoMapper rentalPropertyDtoMapper;
+    RentalPropertyDtoMapper rentalPropertyDtoMapper;
 
     @BeforeEach
     void setUp() {
