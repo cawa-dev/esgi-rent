@@ -1,6 +1,7 @@
 package fr.cars.rentcarsapi.mapper;
 
 import fr.cars.rentcarsapi.domain.RentalCarEntity;
+import fr.cars.rentcarsapi.dto.request.RentalCarRequestDto;
 import fr.cars.rentcarsapi.dto.response.RentalCarResponseDto;
 import org.springframework.stereotype.Component;
 
@@ -25,5 +26,17 @@ public class RentalCarMapper {
         return rentalCarEntities.stream()
                 .map(this::mapToDto)
                 .toList();
+    }
+
+    public RentalCarEntity mapToEntity(RentalCarRequestDto rentalCarRequestDto) {
+        return new RentalCarEntity(
+                rentalCarRequestDto.brand(),
+                rentalCarRequestDto.model(),
+                rentalCarRequestDto.rentAmount(),
+                rentalCarRequestDto.securityDepositAmount(),
+                rentalCarRequestDto.numberOfSeats(),
+                rentalCarRequestDto.numberOfDoors(),
+                rentalCarRequestDto.hasAirConditioning()
+        );
     }
 }

@@ -1,6 +1,7 @@
 package fr.cars.rentcarsapi.service;
 
 import fr.cars.rentcarsapi.domain.RentalCarEntity;
+import fr.cars.rentcarsapi.dto.request.RentalCarRequestDto;
 import fr.cars.rentcarsapi.dto.response.RentalCarResponseDto;
 import fr.cars.rentcarsapi.exception.NotFoundRentalCarException;
 import fr.cars.rentcarsapi.mapper.RentalCarMapper;
@@ -28,5 +29,11 @@ public class RentalCarService {
         return rentalCarRepository.findById(id)
                 .map(rentalCarMapper::mapToDto)
                 .orElseThrow(() -> new NotFoundRentalCarException("Le véhicule avec l'id : " + id + " est introuvable"));
+    }
+
+    public void createRentalCar(RentalCarRequestDto rentalCarRequestDto) {
+        RentalCarEntity rentalCarEntity = rentalCarMapper.mapToEntity(rentalCarRequestDto);
+
+        rentalCarRepository.save(rentalCarEntity);
     }
 }

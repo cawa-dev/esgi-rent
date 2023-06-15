@@ -1,7 +1,9 @@
 package fr.cars.rentcarsapi.api;
 
+import fr.cars.rentcarsapi.dto.request.RentalCarRequestDto;
 import fr.cars.rentcarsapi.dto.response.RentalCarResponseDto;
 import fr.cars.rentcarsapi.service.RentalCarService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -25,5 +27,11 @@ public class RentalCarResource {
     @ResponseStatus(HttpStatus.OK)
     public RentalCarResponseDto getRentalCar(@PathVariable int id) {
         return rentalCarService.getRentalCar(id);
+    }
+
+    @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
+    public void createRentalCar(@RequestBody @Valid RentalCarRequestDto rentalCarRequestDto) {
+        rentalCarService.createRentalCar(rentalCarRequestDto);
     }
 }

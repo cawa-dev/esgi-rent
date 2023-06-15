@@ -1,5 +1,6 @@
 package fr.cars.rentcarsapi.api;
 
+import fr.cars.rentcarsapi.dto.request.RentalCarRequestDto;
 import fr.cars.rentcarsapi.dto.response.RentalCarResponseDto;
 import fr.cars.rentcarsapi.service.RentalCarService;
 import org.junit.jupiter.api.Test;
@@ -12,11 +13,12 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.List;
 
-import static fr.cars.rentcarsapi.samples.RentalCarDtoSample.oneRentalCarResponse;
-import static fr.cars.rentcarsapi.samples.RentalCarDtoSample.rentalCarsResponseList;
+import static fr.cars.rentcarsapi.samples.RentalCarDtoSample.*;
 import static fr.cars.rentcarsapi.utils.TestUtils.readResource;
 import static org.mockito.Mockito.*;
+import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -28,6 +30,12 @@ class RentalCarResourceTest {
 
     @Value("classpath:/json/rentalCar.json")
     Resource rentalCar;
+
+    @Value("classpath:/json/rentalCarRequest.json")
+    Resource rentalCarRequest;
+
+    @Value("classpath:/json/invalidRentalCarRequest.json")
+    Resource invalidRentalCarRequest;
 
     @Autowired
     MockMvc mockMvc;
@@ -68,5 +76,36 @@ class RentalCarResourceTest {
         // THEN
         verify(rentalCarService).getRentalCar(id);
         verifyNoMoreInteractions(rentalCarService);
+    }
+
+    @Test
+    void shouldCreateRentalCar() throws Exception {
+        // GIVEN
+        RentalCarRequestDto rentalCarRequestDto = oneRentalCarRequest();
+
+        // WHEN
+        doNothing().when(rentalCarService).createRentalCar(rentalCarRequestDto);
+
+        mockMvc.perform(post("/rent-cars-api/rental-cars")
+                        .contentType(APPLICATION_JSON_VALUE)
+                        .content(readResource(rentalCarRequest)))
+                .andExpect(status().isCreated());
+
+        // THEN
+        verify(rentalCarService).createRentalCar(rentalCarRequestDto);
+        verifyNoMoreInteractions(rentalCarService);
+    }
+
+    @Test
+    void shouldReturnBadRequestWhenSendInvalidRequestBodyToCreateRentalCar() throws Exception {
+        // WHEN
+        mockMvc.perform(post("/rent-cars-api/rental-cars")
+                        .contentType(APPLICATION_JSON_VALUE)
+                        .content(readResource(invalidRentalCarRequest)))
+                .andExpect(status().isBadRequest())
+                .andExpect(content().json("{\"message\": \"La requête envoyée est invalide\"}"));
+
+        // THEN
+        verifyNoInteractions(rentalCarService);
     }
 }

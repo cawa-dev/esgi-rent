@@ -1,6 +1,7 @@
 package fr.cars.rentcarsapi.service;
 
 import fr.cars.rentcarsapi.domain.RentalCarEntity;
+import fr.cars.rentcarsapi.dto.request.RentalCarRequestDto;
 import fr.cars.rentcarsapi.dto.response.RentalCarResponseDto;
 import fr.cars.rentcarsapi.exception.NotFoundRentalCarException;
 import fr.cars.rentcarsapi.mapper.RentalCarMapper;
@@ -14,8 +15,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.List;
 import java.util.Optional;
 
-import static fr.cars.rentcarsapi.samples.RentalCarDtoSample.oneRentalCarResponse;
-import static fr.cars.rentcarsapi.samples.RentalCarDtoSample.rentalCarsResponseList;
+import static fr.cars.rentcarsapi.samples.RentalCarDtoSample.*;
 import static fr.cars.rentcarsapi.samples.RentalCarEntitySample.oneRentalCarEntity;
 import static fr.cars.rentcarsapi.samples.RentalCarEntitySample.rentalCarEntities;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -91,5 +91,23 @@ class RentalCarServiceTest {
                 .isThrownBy(() -> rentalCarService.getRentalCar(id))
                 .withMessage(throwable.getMessage());
         verifyNoInteractions(rentalCarMapper);
+    }
+
+    @Test
+    void shouldCreateRentalCar() {
+        // GIVEN
+        RentalCarRequestDto rentalCarRequestDto = oneRentalCarRequest();
+        RentalCarEntity rentalCarEntity = oneRentalCarEntity();
+
+        // WHEN
+        when(rentalCarMapper.mapToEntity(rentalCarRequestDto)).thenReturn(rentalCarEntity);
+        when(rentalCarRepository.save(rentalCarEntity)).thenReturn(rentalCarEntity);
+
+        rentalCarService.createRentalCar(rentalCarRequestDto);
+
+        // THEN
+        verify(rentalCarMapper).mapToEntity(rentalCarRequestDto);
+        verify(rentalCarRepository).save(rentalCarEntity);
+        verifyNoMoreInteractions(rentalCarMapper, rentalCarRepository);
     }
 }
