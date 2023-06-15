@@ -53,4 +53,10 @@ public class RentalPropertyResource {
     ) {
         rentalPropertyService.patchRentalProperty(id, propertyRequestDtoPatch);
     }
+
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteRentalProperty(@PathVariable int id) {
+        rentalPropertyService.deleteRentalProperty(id);
+    }
 }

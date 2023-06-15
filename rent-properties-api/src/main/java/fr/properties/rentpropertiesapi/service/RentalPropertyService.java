@@ -71,4 +71,8 @@ public class RentalPropertyService {
 
         rentalPropertyRepository.save(rentalProperty);
     }
+
+    public void deleteRentalProperty(int id) {
+        rentalPropertyRepository.deleteById(id);
+    }
 }

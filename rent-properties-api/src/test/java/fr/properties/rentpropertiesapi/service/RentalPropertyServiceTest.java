@@ -199,4 +199,18 @@ class RentalPropertyServiceTest {
                 .withMessage(throwable.getMessage());
         verifyNoMoreInteractions(rentalPropertyRepository);
     }
+
+    @Test
+    void shouldDeleteRentalProperty() {
+        // GIVEN
+        int id = 0;
+
+        // WHEN
+        rentalPropertyService.deleteRentalProperty(id);
+
+        //THEN
+        verify(rentalPropertyRepository).deleteById(id);
+        verifyNoMoreInteractions(rentalPropertyRepository);
+
+    }
 }

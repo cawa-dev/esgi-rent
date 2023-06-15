@@ -86,71 +86,101 @@ class RentalPropertyResourceTest {
 
     @Test
     void shouldCreateRentalProperty() throws Exception {
+        // GIVEN
         RentalPropertyRequestDto rentalPropertyRequestDto = oneRentalPropertyRequest();
 
-        doNothing().when(rentalPropertyService)
-                .createRentalProperty(rentalPropertyRequestDto);
+        // WHEN
+        doNothing().when(rentalPropertyService).createRentalProperty(rentalPropertyRequestDto);
 
         mockMvc.perform(post("/rent-properties-api/rental-properties")
                         .contentType(APPLICATION_JSON_VALUE)
                         .content(readResource(rentalPropertyRequest)))
                 .andExpect(status().isCreated());
 
+        // THEN
         verify(rentalPropertyService).createRentalProperty(rentalPropertyRequestDto);
         verifyNoMoreInteractions(rentalPropertyService);
     }
 
     @Test
     void shouldReturnBadRequestWhenSendInvalidRequestBodyToCreateRentalProperty() throws Exception {
+        // WHEN
         mockMvc.perform(post("/rent-properties-api/rental-properties")
                         .contentType(APPLICATION_JSON_VALUE)
                         .content(readResource(invalidRentalPropertyRequest)))
                 .andExpect(status().isBadRequest())
                 .andExpect(content().json("{\"message\": \"La requête envoyée est invalide\"}"));
 
+        // THEN
         verifyNoInteractions(rentalPropertyService);
     }
 
     @Test
     void shouldUpdateRentalProperty() throws Exception {
+        // GIVEN
         int id = 1;
         RentalPropertyRequestDto rentalPropertyRequestDto = oneRentalPropertyRequest();
 
-        doNothing().when(rentalPropertyService)
-                .updateRentalProperty(id, rentalPropertyRequestDto);
+        // WHEN
+        doNothing().when(rentalPropertyService).updateRentalProperty(id, rentalPropertyRequestDto);
 
+        // THEN
         mockMvc.perform(put("/rent-properties-api/rental-properties/{id}", id)
                         .contentType(APPLICATION_JSON_VALUE)
                         .content(readResource(rentalPropertyRequest)))
                 .andExpect(status().isOk());
 
+        // THEN
         verify(rentalPropertyService).updateRentalProperty(id, rentalPropertyRequestDto);
         verifyNoMoreInteractions(rentalPropertyService);
     }
 
     @Test
     void shouldPatchRentalProperty() throws Exception {
+        // GIVEN
         int id = 1;
         RentalPropertyRequestDtoPatch rentalPropertyRequestDtoPatch = oneRentalPropertyPatchRequest();
 
+        // WHEN
         mockMvc.perform(patch("/rent-properties-api/rental-properties/{id}", id)
                         .contentType(APPLICATION_JSON_VALUE)
                         .content(readResource(rentalPropertyRequestPatch)))
                 .andExpect(status().isOk());
 
+        // THEN
         verify(rentalPropertyService).patchRentalProperty(id, rentalPropertyRequestDtoPatch);
         verifyNoMoreInteractions(rentalPropertyService);
     }
 
     @Test
     void shouldReturnBadRequestWhenSendInvalidRequestBodyToPatchRentalProperty() throws Exception {
+        // GIVEN
         int id = 0;
+
+        // WHEN
         mockMvc.perform(patch("/rent-properties-api/rental-properties/{id}", id)
                         .contentType(APPLICATION_JSON_VALUE)
                         .content(readResource(invalidRentalPropertyRequestPatch)))
                 .andExpect(status().isBadRequest())
                 .andExpect(content().json("{\"message\": \"La requête envoyée est invalide\"}"));
 
+        // THEN
         verifyNoInteractions(rentalPropertyService);
+    }
+
+    @Test
+    void shouldDeleteRentalProperty() throws Exception {
+        // GIVEN
+        int id = 0;
+
+        // WHEN
+        doNothing().when(rentalPropertyService).deleteRentalProperty(id);
+
+        mockMvc.perform(delete("/rent-properties-api/rental-properties/{id}", id))
+                .andExpect(status().isNoContent());
+
+        // THEN
+        verify(rentalPropertyService).deleteRentalProperty(id);
+        verifyNoMoreInteractions(rentalPropertyService);
     }
 }
