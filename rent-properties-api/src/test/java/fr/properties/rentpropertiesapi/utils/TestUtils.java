@@ -1,11 +1,11 @@
 package fr.properties.rentpropertiesapi.utils;
 
+import org.springframework.core.io.Resource;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.stream.Collectors;
-
-import org.springframework.core.io.Resource;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
 

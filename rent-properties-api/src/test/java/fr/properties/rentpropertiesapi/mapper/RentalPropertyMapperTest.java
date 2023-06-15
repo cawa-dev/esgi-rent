@@ -1,12 +1,12 @@
 package fr.properties.rentpropertiesapi.mapper;
 
-import java.util.List;
-
 import fr.properties.rentpropertiesapi.domain.RentalPropertyEntity;
 import fr.properties.rentpropertiesapi.dto.request.RentalPropertyRequestDto;
 import fr.properties.rentpropertiesapi.dto.response.RentalPropertyResponseDto;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
+import java.util.List;
 
 import static fr.properties.rentpropertiesapi.samples.RentalPropertyDtoSample.oneRentalPropertyRequest;
 import static fr.properties.rentpropertiesapi.samples.RentalPropertyDtoSample.oneRentalPropertyResponse;

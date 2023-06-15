@@ -12,6 +12,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.List;
 
+import static fr.cars.rentcarsapi.samples.RentalCarDtoSample.oneRentalCarResponse;
 import static fr.cars.rentcarsapi.samples.RentalCarDtoSample.rentalCarsResponseList;
 import static fr.cars.rentcarsapi.utils.TestUtils.readResource;
 import static org.mockito.Mockito.*;
@@ -24,6 +25,9 @@ class RentalCarResourceTest {
 
     @Value("classpath:/json/rentalCars.json")
     Resource rentalCars;
+
+    @Value("classpath:/json/rentalCar.json")
+    Resource rentalCar;
 
     @Autowired
     MockMvc mockMvc;
@@ -45,6 +49,24 @@ class RentalCarResourceTest {
 
         // THEN
         verify(rentalCarService).getRentalCars();
+        verifyNoMoreInteractions(rentalCarService);
+    }
+
+    @Test
+    void shouldGetRentalCarById() throws Exception {
+        // GIVEN
+        RentalCarResponseDto rentalCarResponseDto = oneRentalCarResponse();
+        int id = 1;
+
+        // WHEN
+        when(rentalCarService.getRentalCar((id))).thenReturn(rentalCarResponseDto);
+
+        mockMvc.perform(get("/rent-cars-api/rental-cars/{id}", id))
+                .andExpect(status().isOk())
+                .andExpect(content().json(readResource(rentalCar)));
+
+        // THEN
+        verify(rentalCarService).getRentalCar(id);
         verifyNoMoreInteractions(rentalCarService);
     }
 }

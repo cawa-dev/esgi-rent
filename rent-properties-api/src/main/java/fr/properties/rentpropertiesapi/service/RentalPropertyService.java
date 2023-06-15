@@ -1,8 +1,5 @@
 package fr.properties.rentpropertiesapi.service;
 
-import java.util.List;
-import java.util.Optional;
-
 import fr.properties.rentpropertiesapi.domain.PropertyTypeEntity;
 import fr.properties.rentpropertiesapi.domain.RentalPropertyEntity;
 import fr.properties.rentpropertiesapi.dto.request.RentalPropertyRequestDto;
@@ -13,6 +10,9 @@ import fr.properties.rentpropertiesapi.mapper.RentalPropertyMapper;
 import fr.properties.rentpropertiesapi.repository.RentalPropertyRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor

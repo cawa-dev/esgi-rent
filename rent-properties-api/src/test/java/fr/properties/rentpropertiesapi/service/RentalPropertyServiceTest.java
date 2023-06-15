@@ -1,8 +1,5 @@
 package fr.properties.rentpropertiesapi.service;
 
-import java.util.List;
-import java.util.Optional;
-
 import fr.properties.rentpropertiesapi.domain.RentalPropertyEntity;
 import fr.properties.rentpropertiesapi.dto.request.RentalPropertyRequestDto;
 import fr.properties.rentpropertiesapi.dto.request.patch.RentalPropertyRequestDtoPatch;
@@ -16,6 +13,9 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+
+import java.util.List;
+import java.util.Optional;
 
 import static fr.properties.rentpropertiesapi.samples.RentalPropertyDtoSample.*;
 import static fr.properties.rentpropertiesapi.samples.RentalPropertyEntitySample.oneRentalPropertyEntity;

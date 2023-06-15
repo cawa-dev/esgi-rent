@@ -1,10 +1,10 @@
 package fr.properties.rentpropertiesapi.samples;
 
-import java.util.List;
-
 import fr.properties.rentpropertiesapi.dto.request.RentalPropertyRequestDto;
 import fr.properties.rentpropertiesapi.dto.request.patch.RentalPropertyRequestDtoPatch;
 import fr.properties.rentpropertiesapi.dto.response.RentalPropertyResponseDto;
+
+import java.util.List;
 
 public class RentalPropertyDtoSample {
 

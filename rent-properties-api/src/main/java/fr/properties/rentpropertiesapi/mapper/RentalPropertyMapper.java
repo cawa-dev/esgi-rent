@@ -1,13 +1,13 @@
 package fr.properties.rentpropertiesapi.mapper;
 
-import java.util.List;
-
 import fr.properties.rentpropertiesapi.domain.EnergyClassificationEntity;
 import fr.properties.rentpropertiesapi.domain.PropertyTypeEntity;
 import fr.properties.rentpropertiesapi.domain.RentalPropertyEntity;
 import fr.properties.rentpropertiesapi.dto.request.RentalPropertyRequestDto;
 import fr.properties.rentpropertiesapi.dto.response.RentalPropertyResponseDto;
 import org.springframework.stereotype.Component;
+
+import java.util.List;
 
 @Component
 public class RentalPropertyMapper {

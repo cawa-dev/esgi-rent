@@ -2,6 +2,7 @@ package fr.cars.rentcarsapi.service;
 
 import fr.cars.rentcarsapi.domain.RentalCarEntity;
 import fr.cars.rentcarsapi.dto.response.RentalCarResponseDto;
+import fr.cars.rentcarsapi.exception.NotFoundRentalCarException;
 import fr.cars.rentcarsapi.mapper.RentalCarMapper;
 import fr.cars.rentcarsapi.repository.RentalCarRepository;
 import lombok.RequiredArgsConstructor;
@@ -21,5 +22,11 @@ public class RentalCarService {
         List<RentalCarEntity> rentalCarEntities = rentalCarRepository.findAll();
 
         return rentalCarMapper.mapToDtoList(rentalCarEntities);
+    }
+
+    public RentalCarResponseDto getRentalCar(int id) {
+        return rentalCarRepository.findById(id)
+                .map(rentalCarMapper::mapToDto)
+                .orElseThrow(() -> new NotFoundRentalCarException("Le véhicule avec l'id : " + id + " est introuvable"));
     }
 }
