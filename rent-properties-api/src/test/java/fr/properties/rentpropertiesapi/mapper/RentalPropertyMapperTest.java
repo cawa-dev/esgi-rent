@@ -15,13 +15,13 @@ import static fr.properties.rentpropertiesapi.samples.RentalPropertyEntitySample
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.tuple;
 
-class RentalPropertyDtoMapperTest {
+class RentalPropertyMapperTest {
 
-    RentalPropertyDtoMapper rentalPropertyDtoMapper;
+    RentalPropertyMapper rentalPropertyMapper;
 
     @BeforeEach
     void setUp() {
-        rentalPropertyDtoMapper = new RentalPropertyDtoMapper();
+        rentalPropertyMapper = new RentalPropertyMapper();
     }
 
     @Test
@@ -31,7 +31,7 @@ class RentalPropertyDtoMapperTest {
         RentalPropertyEntity expectedRentalPropertyEntity = oneRentalPropertyEntity();
 
         // WHEN
-        RentalPropertyEntity rentalPropertyEntity = rentalPropertyDtoMapper.mapToEntity(rentalPropertyRequest);
+        RentalPropertyEntity rentalPropertyEntity = rentalPropertyMapper.mapToEntity(rentalPropertyRequest);
 
         // THEN
         assertThat(rentalPropertyEntity).isEqualTo(expectedRentalPropertyEntity);
@@ -44,7 +44,7 @@ class RentalPropertyDtoMapperTest {
         RentalPropertyResponseDto expectedRentalPropertyResponseDto = oneRentalPropertyResponse();
 
         // WHEN
-        RentalPropertyResponseDto rentalPropertyResponseDto = rentalPropertyDtoMapper.mapToDto(rentalPropertyEntity);
+        RentalPropertyResponseDto rentalPropertyResponseDto = rentalPropertyMapper.mapToDto(rentalPropertyEntity);
 
         // THEN
         assertThat(rentalPropertyResponseDto).isEqualTo(expectedRentalPropertyResponseDto);
@@ -56,7 +56,7 @@ class RentalPropertyDtoMapperTest {
         List<RentalPropertyEntity> rentalPropertyEntities = rentalPropertyEntities();
 
         // WHEN
-        List<RentalPropertyResponseDto> rentalPropertyResponseList = rentalPropertyDtoMapper.mapToDtoList(rentalPropertyEntities);
+        List<RentalPropertyResponseDto> rentalPropertyResponseList = rentalPropertyMapper.mapToDtoList(rentalPropertyEntities);
 
         // THEN
         assertThat(rentalPropertyResponseList).isNotNull()

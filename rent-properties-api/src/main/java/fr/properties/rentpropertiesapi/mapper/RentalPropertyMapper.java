@@ -10,7 +10,7 @@ import fr.properties.rentpropertiesapi.dto.response.RentalPropertyResponseDto;
 import org.springframework.stereotype.Component;
 
 @Component
-public class RentalPropertyDtoMapper {
+public class RentalPropertyMapper {
 
     public RentalPropertyResponseDto mapToDto(RentalPropertyEntity rentalProperty) {
         return RentalPropertyResponseDto.builder()
