@@ -17,8 +17,7 @@ import static fr.properties.rentpropertiesapi.samples.RentalPropertyDtoSample.*;
 import static fr.properties.rentpropertiesapi.utils.TestUtils.readResource;
 import static org.mockito.Mockito.*;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -103,5 +102,22 @@ class RentalPropertyResourceTest {
                 .andExpect(content().json("{\"message\": \"La requête envoyée est invalide\"}"));
 
         verifyNoInteractions(rentalPropertyService);
+    }
+
+    @Test
+    void shouldUpdateRentalProperty() throws Exception {
+        int id = 1;
+        RentalPropertyRequestDto rentalPropertyRequestDto = oneRentalPropertyRequest();
+
+        doNothing().when(rentalPropertyService)
+                .updateRentalProperty(id, rentalPropertyRequestDto);
+
+        mockMvc.perform(put("/rent-properties-api/rental-properties/{id}", id)
+                        .contentType(APPLICATION_JSON_VALUE)
+                        .content(readResource(rentalPropertyRequest)))
+                .andExpect(status().isOk());
+
+        verify(rentalPropertyService).updateRentalProperty(id, rentalPropertyRequestDto);
+        verifyNoMoreInteractions(rentalPropertyService);
     }
 }

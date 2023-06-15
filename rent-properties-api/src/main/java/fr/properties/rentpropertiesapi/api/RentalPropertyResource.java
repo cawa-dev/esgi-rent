@@ -34,4 +34,13 @@ public class RentalPropertyResource {
     public void createRentalProperty(@Valid @RequestBody RentalPropertyRequestDto rentalPropertyRequestDto) {
         rentalPropertyService.createRentalProperty(rentalPropertyRequestDto);
     }
+
+    @PutMapping("/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public void updateRentalProperty(
+            @PathVariable int id,
+            @Valid @RequestBody RentalPropertyRequestDto rentalPropertyRequestDto
+    ) {
+        rentalPropertyService.updateRentalProperty(id, rentalPropertyRequestDto);
+    }
 }

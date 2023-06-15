@@ -110,4 +110,49 @@ class RentalPropertyServiceTest {
         verify(rentalPropertyRepository).save(rentalPropertyEntity);
         verifyNoMoreInteractions(rentalPropertyDtoMapper, rentalPropertyRepository);
     }
+
+    @Test
+    void shouldUpdateExistingRentalProperty() {
+        // GIVEN
+        int id = 1;
+        RentalPropertyEntity existingRentalProperty = oneRentalPropertyEntity();
+        RentalPropertyRequestDto rentalPropertyRequestDto = oneRentalPropertyRequest();
+
+        // WHEN
+        when(rentalPropertyRepository.findById(id)).thenReturn(Optional.of(existingRentalProperty));
+        rentalPropertyService.updateRentalProperty(id, rentalPropertyRequestDto);
+
+        // THEN
+        assertThat(existingRentalProperty.getDescription()).isEqualTo(rentalPropertyRequestDto.description());
+        assertThat(existingRentalProperty.getTown()).isEqualTo(rentalPropertyRequestDto.town());
+        assertThat(existingRentalProperty.getAddress()).isEqualTo(rentalPropertyRequestDto.address());
+        assertThat(existingRentalProperty.getPropertyType())
+                .hasFieldOrPropertyWithValue("designation", rentalPropertyRequestDto.propertyType());
+        assertThat(existingRentalProperty.getRentAmount()).isEqualTo(rentalPropertyRequestDto.rentAmount());
+        assertThat(existingRentalProperty.getSecurityDepositAmount()).isEqualTo(rentalPropertyRequestDto.securityDepositAmount());
+        assertThat(existingRentalProperty.getArea()).isEqualTo(rentalPropertyRequestDto.area());
+
+        verify(rentalPropertyRepository, times(1)).findById(id);
+        verify(rentalPropertyRepository, times(1)).save(existingRentalProperty);
+        verifyNoMoreInteractions(rentalPropertyRepository);
+    }
+
+    @Test
+    void shouldCreateRentalPropertyWhenTryingToUpdateANonExistingRentalProperty() {
+        // GIVEN
+        int id = 2;
+        var rentalPropertyRequestDto = oneRentalPropertyRequest();
+        var newRentalProperty = oneRentalPropertyEntity();
+
+        // WHEN
+        when(rentalPropertyRepository.findById(id)).thenReturn(Optional.empty());
+        when(rentalPropertyDtoMapper.mapToEntity(rentalPropertyRequestDto)).thenReturn(newRentalProperty);
+
+        rentalPropertyService.updateRentalProperty(id, rentalPropertyRequestDto);
+
+        // THEN
+        verify(rentalPropertyRepository, times(1)).findById(id);
+        verify(rentalPropertyRepository, times(1)).save(any(RentalPropertyEntity.class));
+        verifyNoMoreInteractions(rentalPropertyRepository);
+    }
 }
