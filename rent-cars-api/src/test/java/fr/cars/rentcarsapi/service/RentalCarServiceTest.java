@@ -198,4 +198,17 @@ class RentalCarServiceTest {
                 .withMessage(throwable.getMessage());
         verifyNoMoreInteractions(rentalCarRepository);
     }
+
+    @Test
+    void shouldDeleteRentalCar() {
+        // GIVEN
+        int id = 0;
+
+        // WHEN
+        rentalCarService.deleteRentalCar(id);
+
+        //THEN
+        verify(rentalCarRepository).deleteById(id);
+        verifyNoMoreInteractions(rentalCarRepository);
+    }
 }

@@ -211,6 +211,5 @@ class RentalPropertyServiceTest {
         //THEN
         verify(rentalPropertyRepository).deleteById(id);
         verifyNoMoreInteractions(rentalPropertyRepository);
-
     }
 }

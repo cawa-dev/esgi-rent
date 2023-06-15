@@ -167,4 +167,20 @@ class RentalCarResourceTest {
         // THEN
         verifyNoInteractions(rentalCarService);
     }
+
+    @Test
+    void shouldDeleteRentalCar() throws Exception {
+        // GIVEN
+        int id = 0;
+
+        // WHEN
+        doNothing().when(rentalCarService).deleteRentalCar(id);
+
+        mockMvc.perform(delete("/rent-cars-api/rental-cars/{id}", id))
+                .andExpect(status().isNoContent());
+
+        // THEN
+        verify(rentalCarService).deleteRentalCar(id);
+        verifyNoMoreInteractions(rentalCarService);
+    }
 }

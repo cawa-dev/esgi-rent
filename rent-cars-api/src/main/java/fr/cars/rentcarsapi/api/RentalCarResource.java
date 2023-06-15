@@ -53,4 +53,10 @@ public class RentalCarResource {
     ) {
         rentalCarService.patchRentalCar(id, rentalCarRequestDtoPatch);
     }
+
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteRentalCar(@PathVariable int id) {
+        rentalCarService.deleteRentalCar(id);
+    }
 }

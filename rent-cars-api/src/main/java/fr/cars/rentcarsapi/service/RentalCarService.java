@@ -68,4 +68,8 @@ public class RentalCarService {
 
         rentalCarRepository.save(rentalCar);
     }
+
+    public void deleteRentalCar(int id) {
+        rentalCarRepository.deleteById(id);
+    }
 }
