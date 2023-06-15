@@ -34,4 +34,13 @@ public class RentalCarResource {
     public void createRentalCar(@RequestBody @Valid RentalCarRequestDto rentalCarRequestDto) {
         rentalCarService.createRentalCar(rentalCarRequestDto);
     }
+
+    @PutMapping("/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public void updateRentalCar(
+            @RequestBody @Valid RentalCarRequestDto rentalCarRequestDto,
+            @PathVariable int id
+    ) {
+        rentalCarService.updateRentalCar(id, rentalCarRequestDto);
+    }
 }

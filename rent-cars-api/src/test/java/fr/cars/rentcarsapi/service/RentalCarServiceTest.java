@@ -110,4 +110,48 @@ class RentalCarServiceTest {
         verify(rentalCarRepository).save(rentalCarEntity);
         verifyNoMoreInteractions(rentalCarMapper, rentalCarRepository);
     }
+
+    @Test
+    void shouldUpdateExistingRentalCar() {
+        // GIVEN
+        int id = 1;
+        RentalCarEntity existingRentalCar = oneRentalCarEntity();
+        RentalCarRequestDto rentalCarRequestDto = oneRentalCarRequest();
+
+        // WHEN
+        when(rentalCarRepository.findById(id)).thenReturn(Optional.of(existingRentalCar));
+        rentalCarService.updateRentalCar(id, rentalCarRequestDto);
+
+        // THEN
+        assertThat(existingRentalCar.getBrand()).isEqualTo(rentalCarRequestDto.brand());
+        assertThat(existingRentalCar.getModel()).isEqualTo(rentalCarRequestDto.model());
+        assertThat(existingRentalCar.getRentAmount()).isEqualTo(rentalCarRequestDto.rentAmount());
+        assertThat(existingRentalCar.getSecurityDepositAmount()).isEqualTo(rentalCarRequestDto.securityDepositAmount());
+        assertThat(existingRentalCar.getNumberOfSeats()).isEqualTo(rentalCarRequestDto.numberOfSeats());
+        assertThat(existingRentalCar.getNumberOfDoors()).isEqualTo(rentalCarRequestDto.numberOfDoors());
+        assertThat(existingRentalCar.getHasAirConditioning()).isEqualTo(rentalCarRequestDto.hasAirConditioning());
+
+        verify(rentalCarRepository, times(1)).findById(id);
+        verify(rentalCarRepository, times(1)).save(existingRentalCar);
+        verifyNoMoreInteractions(rentalCarRepository);
+    }
+
+    @Test
+    void shouldCreateRentalCarWhenTryingToUpdateANonExistingRentalCar() {
+        // GIVEN
+        int id = 2;
+        var rentalCarRequestDto = oneRentalCarRequest();
+        var newRentalCar = oneRentalCarEntity();
+
+        // WHEN
+        when(rentalCarRepository.findById(id)).thenReturn(Optional.empty());
+        when(rentalCarMapper.mapToEntity(rentalCarRequestDto)).thenReturn(newRentalCar);
+
+        rentalCarService.updateRentalCar(id, rentalCarRequestDto);
+
+        // THEN
+        verify(rentalCarRepository, times(1)).findById(id);
+        verify(rentalCarRepository, times(1)).save(any(RentalCarEntity.class));
+        verifyNoMoreInteractions(rentalCarRepository);
+    }
 }

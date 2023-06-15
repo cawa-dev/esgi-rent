@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -35,5 +36,26 @@ public class RentalCarService {
         RentalCarEntity rentalCarEntity = rentalCarMapper.mapToEntity(rentalCarRequestDto);
 
         rentalCarRepository.save(rentalCarEntity);
+    }
+
+    public void updateRentalCar(int id, RentalCarRequestDto rentalCarRequestDto) {
+        Optional<RentalCarEntity> optionalExistingRentalCar = rentalCarRepository.findById(id);
+
+        if (optionalExistingRentalCar.isPresent()) {
+            RentalCarEntity existingRentalCar = optionalExistingRentalCar.get();
+            existingRentalCar.setBrand(rentalCarRequestDto.brand());
+            existingRentalCar.setModel(rentalCarRequestDto.model());
+            existingRentalCar.setRentAmount(rentalCarRequestDto.rentAmount());
+            existingRentalCar.setSecurityDepositAmount(rentalCarRequestDto.securityDepositAmount());
+            existingRentalCar.setNumberOfSeats(rentalCarRequestDto.numberOfSeats());
+            existingRentalCar.setNumberOfDoors(rentalCarRequestDto.numberOfDoors());
+            existingRentalCar.setHasAirConditioning(rentalCarRequestDto.hasAirConditioning());
+
+            rentalCarRepository.save(existingRentalCar);
+        } else {
+            RentalCarEntity newRentalCar = rentalCarMapper.mapToEntity(rentalCarRequestDto);
+
+            rentalCarRepository.save(newRentalCar);
+        }
     }
 }

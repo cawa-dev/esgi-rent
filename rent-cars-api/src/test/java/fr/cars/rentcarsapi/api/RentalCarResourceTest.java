@@ -17,8 +17,7 @@ import static fr.cars.rentcarsapi.samples.RentalCarDtoSample.*;
 import static fr.cars.rentcarsapi.utils.TestUtils.readResource;
 import static org.mockito.Mockito.*;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -107,5 +106,25 @@ class RentalCarResourceTest {
 
         // THEN
         verifyNoInteractions(rentalCarService);
+    }
+
+    @Test
+    void shouldUpdateRentalCar() throws Exception {
+        // GIVEN
+        int id = 1;
+        RentalCarRequestDto rentalCarRequestDto = oneRentalCarRequest();
+
+        // WHEN
+        doNothing().when(rentalCarService).updateRentalCar(id, rentalCarRequestDto);
+
+        // THEN
+        mockMvc.perform(put("/rent-cars-api/rental-cars/{id}", id)
+                        .contentType(APPLICATION_JSON_VALUE)
+                        .content(readResource(rentalCarRequest)))
+                .andExpect(status().isOk());
+
+        // THEN
+        verify(rentalCarService).updateRentalCar(id, rentalCarRequestDto);
+        verifyNoMoreInteractions(rentalCarService);
     }
 }
