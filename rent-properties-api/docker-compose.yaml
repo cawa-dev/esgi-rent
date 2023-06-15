@@ -1,16 +1,17 @@
 version: '3.7'
 services:
-  postgres:
-    container_name: postgres-esgi-rent
-    image: postgres:latest
+  mysql:
+    container_name: mysql-esgi-rent
+    image: mysql:8.0
     restart: always
     environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: esgi-rent
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: esgi-rent
+      MYSQL_USER: mysql
+      MYSQL_PASSWORD: mysql
     ports:
-      - "5432:5432"
+      - "3306:3306"
     volumes:
-      - esgi-rent:/var/lib/postgresql/data
+      - esgi-rent:/var/lib/mysql
 volumes:
   esgi-rent:

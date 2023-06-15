@@ -4,4 +4,105 @@
         xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
 
+    <changeSet id="create_rental_property" author="esgi-rent">
+        <createTable tableName="rental_property">
+            <column name="id" type="INT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false" />
+            </column>
+            <column name="description" type="VARCHAR(200)">
+                <constraints nullable="false" />
+            </column>
+            <column name="town" type="VARCHAR(100)">
+                <constraints nullable="false" />
+            </column>
+            <column name="address" type="VARCHAR(200)">
+                <constraints nullable="false" />
+            </column>
+             <column name="property_type_id" type="INT">
+                <constraints nullable="false" />
+            </column>
+            <column name="rent_amount" type="DOUBLE">
+                <constraints nullable="false" />
+            </column>
+            <column name="security_deposit_amount" type="DOUBLE">
+                <constraints nullable="false" />
+            </column>
+            <column name="area" type="DOUBLE">
+                <constraints nullable="false" />
+            </column>
+            <column name="number_of_bedrooms" type="INT">
+                <constraints nullable="true" />
+            </column>
+            <column name="floor_number" type="INT">
+                <constraints nullable="true" />
+            </column>
+            <column name="number_of_floors" type="INT">
+                <constraints nullable="true" />
+            </column>
+            <column name="construction_year" type="CHAR(4)">
+                <constraints nullable="true" />
+            </column>
+            <column name="energy_classification_id" type="INT">
+                <constraints nullable="true" />
+            </column>
+            <column name="has_elevator" type="BIT(1)">
+                <constraints nullable="true" />
+            </column>
+            <column name="has_intercom" type="BIT(1)">
+                <constraints nullable="true" />
+            </column>
+            <column name="has_balcony" type="BIT(1)">
+                <constraints nullable="true" />
+            </column>
+            <column name="has_parking_space" type="BIT(1)">
+                <constraints nullable="true" />
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="create_property_type" author="esgi-rent">
+        <createTable tableName="property_type">
+            <column name="id" type="INT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false" />
+            </column>
+            <column name="designation" type="VARCHAR(5)">
+                <constraints nullable="false" />
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="create_energy_classification" author="esgi-rent">
+        <createTable tableName="energy_classification">
+            <column name="id" type="INT" autoIncrement="true">
+                <constraints primaryKey="true" />
+            </column>
+            <column name="designation" type="CHAR(1)">
+                <constraints nullable="true" />
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="add_foreign_keys_rental_property" author="esgi-rent">
+        <addForeignKeyConstraint baseColumnNames="property_type_id"
+                                 baseTableName="rental_property"
+                                 constraintName="fk_rental_property_property_type"
+                                 deferrable="false"
+                                 initiallyDeferred="false"
+                                 onDelete="CASCADE"
+                                 onUpdate="CASCADE"
+                                 referencedColumnNames="id"
+                                 referencedTableName="property_type"
+                                 validate="true" />
+        <addForeignKeyConstraint baseColumnNames="energy_classification_id"
+                                 baseTableName="rental_property"
+                                 constraintName="fk_rental_property_energy_classification"
+                                 deferrable="false"
+                                 initiallyDeferred="false"
+                                 onDelete="CASCADE"
+                                 onUpdate="CASCADE"
+                                 referencedColumnNames="id"
+                                 referencedTableName="energy_classification"
+                                 validate="true" />
+    </changeSet>
+    
 </databaseChangeLog>
