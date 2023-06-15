@@ -3,9 +3,16 @@ package fr.properties.rentpropertiesapi.samples;
 import java.util.List;
 
 import fr.properties.rentpropertiesapi.dto.request.RentalPropertyRequestDto;
+import fr.properties.rentpropertiesapi.dto.request.patch.RentalPropertyRequestDtoPatch;
 import fr.properties.rentpropertiesapi.dto.response.RentalPropertyResponseDto;
 
 public class RentalPropertyDtoSample {
+
+    public static RentalPropertyRequestDtoPatch oneRentalPropertyPatchRequest() {
+        return RentalPropertyRequestDtoPatch.builder()
+                .rentAmount(1000.00)
+                .build();
+    }
 
     public static RentalPropertyRequestDto oneRentalPropertyRequest() {
         return RentalPropertyRequestDto.builder()

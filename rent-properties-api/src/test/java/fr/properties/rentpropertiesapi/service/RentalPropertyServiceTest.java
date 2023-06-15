@@ -5,12 +5,14 @@ import java.util.Optional;
 
 import fr.properties.rentpropertiesapi.domain.RentalPropertyEntity;
 import fr.properties.rentpropertiesapi.dto.request.RentalPropertyRequestDto;
+import fr.properties.rentpropertiesapi.dto.request.patch.RentalPropertyRequestDtoPatch;
 import fr.properties.rentpropertiesapi.dto.response.RentalPropertyResponseDto;
 import fr.properties.rentpropertiesapi.exception.NotFoundRentalPropertyException;
 import fr.properties.rentpropertiesapi.mapper.RentalPropertyDtoMapper;
 import fr.properties.rentpropertiesapi.repository.RentalPropertyRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -20,6 +22,7 @@ import static fr.properties.rentpropertiesapi.samples.RentalPropertyEntitySample
 import static fr.properties.rentpropertiesapi.samples.RentalPropertyEntitySample.rentalPropertyEntities;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
+import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -153,6 +156,47 @@ class RentalPropertyServiceTest {
         // THEN
         verify(rentalPropertyRepository, times(1)).findById(id);
         verify(rentalPropertyRepository, times(1)).save(any(RentalPropertyEntity.class));
+        verifyNoMoreInteractions(rentalPropertyRepository);
+    }
+
+    @Test
+    void shouldPatchRentAmountOnExistingRentalProperty() {
+        // GIVEN
+        int id = 1;
+        RentalPropertyRequestDtoPatch propertyRequestDtoPatch = oneRentalPropertyPatchRequest();
+        RentalPropertyEntity rentalPropertyEntity = oneRentalPropertyEntity();
+
+        given(rentalPropertyRepository.findById(id)).willReturn(Optional.of(rentalPropertyEntity));
+        ArgumentCaptor<RentalPropertyEntity> captor = ArgumentCaptor.forClass(RentalPropertyEntity.class);
+
+        // WHEN
+        rentalPropertyService.patchRentalProperty(id, propertyRequestDtoPatch);
+
+        // THEN
+        verify(rentalPropertyRepository, times(1)).findById(id);
+        verify(rentalPropertyRepository, times(1)).save(captor.capture());
+
+        var savedRentalProperty = captor.getValue();
+        assertThat(savedRentalProperty).isNotNull();
+        assertThat(savedRentalProperty.getRentAmount()).isEqualTo(1000.0);
+
+        verifyNoMoreInteractions(rentalPropertyRepository);
+    }
+
+    @Test
+    void shouldThrowNotFoundRentalPropertyExceptionWhenRentalPropertyIsNotFoundAndIsTryingToBePatch() {
+        // GIVEN
+        int id = 9999;
+        var throwable = new NotFoundRentalPropertyException("Le bien immobilier avec l'id : " + id + " est introuvable");
+        RentalPropertyRequestDtoPatch propertyRequestDtoPatch = oneRentalPropertyPatchRequest();
+
+        // WHEN
+        when(rentalPropertyRepository.findById(id)).thenThrow(throwable);
+
+        // THEN
+        assertThatExceptionOfType(NotFoundRentalPropertyException.class)
+                .isThrownBy(() -> rentalPropertyService.patchRentalProperty(id, propertyRequestDtoPatch))
+                .withMessage(throwable.getMessage());
         verifyNoMoreInteractions(rentalPropertyRepository);
     }
 }

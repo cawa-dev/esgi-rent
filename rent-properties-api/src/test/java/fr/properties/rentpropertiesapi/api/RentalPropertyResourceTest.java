@@ -3,6 +3,7 @@ package fr.properties.rentpropertiesapi.api;
 import java.util.List;
 
 import fr.properties.rentpropertiesapi.dto.request.RentalPropertyRequestDto;
+import fr.properties.rentpropertiesapi.dto.request.patch.RentalPropertyRequestDtoPatch;
 import fr.properties.rentpropertiesapi.dto.response.RentalPropertyResponseDto;
 import fr.properties.rentpropertiesapi.service.RentalPropertyService;
 import org.junit.jupiter.api.Test;
@@ -33,8 +34,14 @@ class RentalPropertyResourceTest {
     @Value("classpath:/json/rentalPropertyRequest.json")
     Resource rentalPropertyRequest;
 
+    @Value("classpath:/json/rentalPropertyRequestPatch.json")
+    Resource rentalPropertyRequestPatch;
+
     @Value("classpath:/json/invalidRentalPropertyRequest.json")
     Resource invalidRentalPropertyRequest;
+
+    @Value("classpath:/json/invalidRentalPropertyRequestPatch.json")
+    Resource invalidRentalPropertyRequestPatch;
 
     @Autowired
     MockMvc mockMvc;
@@ -94,7 +101,7 @@ class RentalPropertyResourceTest {
     }
 
     @Test
-    void shouldReturnBadRequestWhenSendInvalidRequestBody() throws Exception {
+    void shouldReturnBadRequestWhenSendInvalidRequestBodyToCreateRentalProperty() throws Exception {
         mockMvc.perform(post("/rent-properties-api/rental-properties")
                         .contentType(APPLICATION_JSON_VALUE)
                         .content(readResource(invalidRentalPropertyRequest)))
@@ -119,5 +126,31 @@ class RentalPropertyResourceTest {
 
         verify(rentalPropertyService).updateRentalProperty(id, rentalPropertyRequestDto);
         verifyNoMoreInteractions(rentalPropertyService);
+    }
+
+    @Test
+    void shouldPatchRentalProperty() throws Exception {
+        int id = 1;
+        RentalPropertyRequestDtoPatch rentalPropertyRequestDtoPatch = oneRentalPropertyPatchRequest();
+
+        mockMvc.perform(patch("/rent-properties-api/rental-properties/{id}", id)
+                        .contentType(APPLICATION_JSON_VALUE)
+                        .content(readResource(rentalPropertyRequestPatch)))
+                .andExpect(status().isOk());
+
+        verify(rentalPropertyService).patchRentalProperty(id, rentalPropertyRequestDtoPatch);
+        verifyNoMoreInteractions(rentalPropertyService);
+    }
+
+    @Test
+    void shouldReturnBadRequestWhenSendInvalidRequestBodyToPatchRentalProperty() throws Exception {
+        int id = 0;
+        mockMvc.perform(patch("/rent-properties-api/rental-properties/{id}", id)
+                        .contentType(APPLICATION_JSON_VALUE)
+                        .content(readResource(invalidRentalPropertyRequestPatch)))
+                .andExpect(status().isBadRequest())
+                .andExpect(content().json("{\"message\": \"La requête envoyée est invalide\"}"));
+
+        verifyNoInteractions(rentalPropertyService);
     }
 }

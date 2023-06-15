@@ -3,6 +3,7 @@ package fr.properties.rentpropertiesapi.api;
 import java.util.List;
 
 import fr.properties.rentpropertiesapi.dto.request.RentalPropertyRequestDto;
+import fr.properties.rentpropertiesapi.dto.request.patch.RentalPropertyRequestDtoPatch;
 import fr.properties.rentpropertiesapi.dto.response.RentalPropertyResponseDto;
 import fr.properties.rentpropertiesapi.service.RentalPropertyService;
 import jakarta.validation.Valid;
@@ -42,5 +43,14 @@ public class RentalPropertyResource {
             @Valid @RequestBody RentalPropertyRequestDto rentalPropertyRequestDto
     ) {
         rentalPropertyService.updateRentalProperty(id, rentalPropertyRequestDto);
+    }
+
+    @PatchMapping("/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public void patchRentalProperty(
+            @PathVariable int id,
+            @Valid @RequestBody RentalPropertyRequestDtoPatch propertyRequestDtoPatch
+    ) {
+        rentalPropertyService.patchRentalProperty(id, propertyRequestDtoPatch);
     }
 }

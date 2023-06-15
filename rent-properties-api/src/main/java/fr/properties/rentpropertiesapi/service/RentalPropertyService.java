@@ -6,6 +6,7 @@ import java.util.Optional;
 import fr.properties.rentpropertiesapi.domain.PropertyTypeEntity;
 import fr.properties.rentpropertiesapi.domain.RentalPropertyEntity;
 import fr.properties.rentpropertiesapi.dto.request.RentalPropertyRequestDto;
+import fr.properties.rentpropertiesapi.dto.request.patch.RentalPropertyRequestDtoPatch;
 import fr.properties.rentpropertiesapi.dto.response.RentalPropertyResponseDto;
 import fr.properties.rentpropertiesapi.exception.NotFoundRentalPropertyException;
 import fr.properties.rentpropertiesapi.mapper.RentalPropertyDtoMapper;
@@ -60,5 +61,14 @@ public class RentalPropertyService {
 
             rentalPropertyRepository.save(newRentalProperty);
         }
+    }
+
+    public void patchRentalProperty(int id, RentalPropertyRequestDtoPatch propertyRequestDtoPatch) {
+        RentalPropertyEntity rentalProperty = rentalPropertyRepository.findById(id)
+                .orElseThrow(() -> new NotFoundRentalPropertyException("Le bien immobilier avec l'id : " + id + " est introuvable"));
+
+        rentalProperty.setRentAmount(propertyRequestDtoPatch.rentAmount());
+
+        rentalPropertyRepository.save(rentalProperty);
     }
 }
