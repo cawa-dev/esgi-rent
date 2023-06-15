@@ -8,12 +8,12 @@
     <parent>
         <groupId>fr.esgi</groupId>
         <artifactId>esgi-rent</artifactId>
-        <version>2.0.0</version>
+        <version>3.0-SNAPSHOT</version>
     </parent>
 
     <groupId>fr.properties</groupId>
     <artifactId>rent-properties-api</artifactId>
-    <version>2.0.0</version>
+    <version>3.0-SNAPSHOT</version>
     <name>rent-properties-api</name>
     <description>rent-properties-api</description>
     <packaging>jar</packaging>
