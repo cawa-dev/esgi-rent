@@ -14,11 +14,13 @@ import java.util.List;
 @ApplicationScoped
 public class RentalPropertyService {
 
+    private static final String RENTAL_PROPERTIES_URL = "http://localhost:8081/rent-properties-api/rental-properties";
+
     public List<RentalPropertyResponseDto> getRentalProperties() {
         HttpClient httpClient = HttpClient.newHttpClient();
 
         HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create("http://localhost:8081/rent-properties-api/rental-properties"))
+                .uri(URI.create(RENTAL_PROPERTIES_URL))
                 .GET()
                 .build();
 
