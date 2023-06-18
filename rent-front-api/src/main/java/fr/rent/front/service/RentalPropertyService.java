@@ -1,50 +1,34 @@
 package fr.rent.front.service;
 
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import fr.rent.front.api.RentalPropertyApiClient;
 import fr.rent.front.dto.RentalPropertyResponseDto;
+import fr.rent.front.mapper.RentalPropertyResponseMapper;
 import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
 
-import java.net.URI;
-import java.net.http.HttpClient;
-import java.net.http.HttpRequest;
-import java.net.http.HttpResponse;
+import java.io.IOException;
 import java.util.List;
 
 @ApplicationScoped
 public class RentalPropertyService {
 
-    private static final String RENTAL_PROPERTIES_URL = "http://localhost:8081/rent-properties-api/rental-properties";
+    private final RentalPropertyApiClient apiClient;
+    private final RentalPropertyResponseMapper responseMapper;
+
+    @Inject
+    public RentalPropertyService(RentalPropertyApiClient apiClient, RentalPropertyResponseMapper responseMapper) {
+        this.apiClient = apiClient;
+        this.responseMapper = responseMapper;
+    }
+
 
     public List<RentalPropertyResponseDto> getRentalProperties() {
-        HttpClient httpClient = HttpClient.newHttpClient();
-
-        HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create(RENTAL_PROPERTIES_URL))
-                .GET()
-                .build();
-
         try {
-            HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
-
-            int statusCode = response.statusCode();
-            String responseBody = response.body();
-
-            if (statusCode == 200) {
-                ObjectMapper objectMapper = new ObjectMapper();
-                List<RentalPropertyResponseDto> rentalProperties = objectMapper.readValue(
-                        responseBody,
-                        new TypeReference<>() {
-                        }
-                );
-                return rentalProperties;
-            } else {
-                System.err.println("Error response received. Status code: " + statusCode);
-            }
-        } catch (Exception e) {
+            String responseBody = apiClient.fetchRentalProperties();
+            return responseMapper.mapToResponse(responseBody);
+        } catch (IOException | InterruptedException e) {
             e.printStackTrace();
         }
-
         return null;
     }
 }
