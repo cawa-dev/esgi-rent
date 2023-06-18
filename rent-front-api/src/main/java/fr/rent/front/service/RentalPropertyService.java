@@ -12,15 +12,11 @@ import java.util.List;
 @ApplicationScoped
 public class RentalPropertyService {
 
-    private final RentalPropertyApiClient apiClient;
-    private final RentalPropertyResponseMapper responseMapper;
+    @Inject
+    private RentalPropertyApiClient apiClient;
 
     @Inject
-    public RentalPropertyService(RentalPropertyApiClient apiClient, RentalPropertyResponseMapper responseMapper) {
-        this.apiClient = apiClient;
-        this.responseMapper = responseMapper;
-    }
-
+    private RentalPropertyResponseMapper responseMapper;
 
     public List<RentalPropertyResponseDto> getRentalProperties() {
         try {
@@ -29,6 +25,6 @@ public class RentalPropertyService {
         } catch (IOException | InterruptedException e) {
             e.printStackTrace();
         }
-        return null;
+        return List.of();
     }
 }
