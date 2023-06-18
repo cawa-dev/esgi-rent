@@ -13,6 +13,7 @@ import java.net.http.HttpResponse;
 public class RentalPropertyApiClient {
 
     private static final String RENTAL_PROPERTIES_URL = "http://localhost:8081/rent-properties-api/rental-properties";
+    private static final String RENTAL_PROPERTY_URL = "http://localhost:8081/rent-properties-api/rental-properties/";
 
     private final HttpClient httpClient;
 
@@ -24,6 +25,16 @@ public class RentalPropertyApiClient {
     public String fetchRentalProperties() throws IOException, InterruptedException {
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create(RENTAL_PROPERTIES_URL))
+                .GET()
+                .build();
+
+        HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+        return response.body();
+    }
+
+    public String fetchRentalProperty(String id) throws IOException, InterruptedException {
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create(RENTAL_PROPERTY_URL + id))
                 .GET()
                 .build();
 

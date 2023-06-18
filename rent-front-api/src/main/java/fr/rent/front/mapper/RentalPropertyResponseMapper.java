@@ -19,7 +19,13 @@ public class RentalPropertyResponseMapper {
         this.objectMapper = new ObjectMapper();
     }
 
-    public List<RentalPropertyResponseDto> mapToResponse(String responseBody) throws IOException {
-        return objectMapper.readValue(responseBody, new TypeReference<>() {});
+    public List<RentalPropertyResponseDto> mapToListResponse(String responseBody) throws IOException {
+        return objectMapper.readValue(responseBody, new TypeReference<>() {
+        });
+    }
+
+    public RentalPropertyResponseDto mapToResponse(String responseBody) throws IOException {
+        return objectMapper.readValue(responseBody, new TypeReference<>() {
+        });
     }
 }

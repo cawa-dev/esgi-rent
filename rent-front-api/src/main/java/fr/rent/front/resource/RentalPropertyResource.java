@@ -5,6 +5,7 @@ import fr.rent.front.service.RentalPropertyService;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Path;
+import jakarta.ws.rs.PathParam;
 
 import java.util.List;
 
@@ -21,5 +22,11 @@ public class RentalPropertyResource {
     @GET
     public List<RentalPropertyResponseDto> getRentalProperties() {
         return rentalPropertyService.getRentalProperties();
+    }
+
+    @GET
+    @Path("/{id}")
+    public RentalPropertyResponseDto getRentalProperty(@PathParam("id") String id) {
+        return rentalPropertyService.getRentalProperty(id);
     }
 }
