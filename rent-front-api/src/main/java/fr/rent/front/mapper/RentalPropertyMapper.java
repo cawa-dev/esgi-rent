@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import fr.rent.front.dto.request.RentalPropertyRequestDto;
+import fr.rent.front.dto.request.patch.RentalPropertyRequestDtoPatch;
 import fr.rent.front.dto.response.RentalPropertyResponseDto;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
@@ -38,9 +39,17 @@ public class RentalPropertyMapper {
         }
     }
 
-    public String mapToBody(RentalPropertyRequestDto rentalPropertyRequestDto) {
+    public String mapToBodyRequest(RentalPropertyRequestDto rentalPropertyRequestDto) {
         try {
             return objectMapper.writeValueAsString(rentalPropertyRequestDto);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public String mapToBodyRequestPatch(RentalPropertyRequestDtoPatch rentalPropertyRequestDtoPatch) {
+        try {
+            return objectMapper.writeValueAsString(rentalPropertyRequestDtoPatch);
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
         }

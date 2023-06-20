@@ -2,6 +2,7 @@ package fr.rent.front.service;
 
 import fr.rent.front.api.RentalPropertyApiClient;
 import fr.rent.front.dto.request.RentalPropertyRequestDto;
+import fr.rent.front.dto.request.patch.RentalPropertyRequestDtoPatch;
 import fr.rent.front.dto.response.RentalPropertyResponseDto;
 import fr.rent.front.mapper.RentalPropertyMapper;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -34,5 +35,9 @@ public class RentalPropertyService {
 
     public void updateRentalProperty(String id, RentalPropertyRequestDto rentalPropertyRequestDto) {
         apiClient.putRentalProperty(id, rentalPropertyRequestDto);
+    }
+
+    public void patchRentalProperty(String id, RentalPropertyRequestDtoPatch rentalPropertyRequestDtoPatch) {
+        apiClient.patchRentalProperty(id, rentalPropertyRequestDtoPatch);
     }
 }

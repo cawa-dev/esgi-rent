@@ -1,6 +1,7 @@
 package fr.rent.front.api;
 
 import fr.rent.front.dto.request.RentalPropertyRequestDto;
+import fr.rent.front.dto.request.patch.RentalPropertyRequestDtoPatch;
 import fr.rent.front.exception.InvalidRequestRentalPropertyException;
 import fr.rent.front.exception.NotFoundRentalPropertyException;
 import fr.rent.front.mapper.RentalPropertyMapper;
@@ -64,7 +65,7 @@ public class RentalPropertyApiClient {
     }
 
     public void postRentalProperty(RentalPropertyRequestDto rentalPropertyRequestDto) {
-        var rentalPropertyRequestDtoMapped = rentalPropertyMapper.mapToBody(rentalPropertyRequestDto);
+        var rentalPropertyRequestDtoMapped = rentalPropertyMapper.mapToBodyRequest(rentalPropertyRequestDto);
 
         HttpRequest request = newBuilder()
                 .uri(URI.create(GLOBAL_RENTAL_PROPERTIES_API))
@@ -85,7 +86,7 @@ public class RentalPropertyApiClient {
     }
 
     public void putRentalProperty(String id, RentalPropertyRequestDto rentalPropertyRequestDto) {
-        var rentalPropertyRequestDtoMapped = rentalPropertyMapper.mapToBody(rentalPropertyRequestDto);
+        var rentalPropertyRequestDtoMapped = rentalPropertyMapper.mapToBodyRequest(rentalPropertyRequestDto);
 
         HttpRequest request = newBuilder()
                 .uri(URI.create(GLOBAL_RENTAL_PROPERTIES_API + "/%s".formatted(id)))
@@ -98,6 +99,29 @@ public class RentalPropertyApiClient {
 
             if (response.statusCode() != 200) {
                 throw new InvalidRequestRentalPropertyException("La requête est invalide !");
+            }
+
+        } catch (IOException | InterruptedException exception) {
+            throw new RuntimeException(exception);
+        }
+    }
+
+    public void patchRentalProperty(String id, RentalPropertyRequestDtoPatch rentalPropertyRequestDtoPatch) {
+        var rentalPropertyRequestPatchDtoMapped = rentalPropertyMapper.mapToBodyRequestPatch(rentalPropertyRequestDtoPatch);
+
+        HttpRequest request = newBuilder()
+                .uri(URI.create(GLOBAL_RENTAL_PROPERTIES_API + "/%s".formatted(id)))
+                .header("Content-Type", "application/json")
+                .method("PATCH", BodyPublishers.ofString(rentalPropertyRequestPatchDtoMapped))
+                .build();
+
+        try {
+            HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+
+            switch (response.statusCode()) {
+                case 404 ->
+                        throw new NotFoundRentalPropertyException("Le bien immobilier avec l'id : %s est introuvable".formatted(id));
+                case 400 -> throw new InvalidRequestRentalPropertyException("La requête est invalide !");
             }
 
         } catch (IOException | InterruptedException exception) {

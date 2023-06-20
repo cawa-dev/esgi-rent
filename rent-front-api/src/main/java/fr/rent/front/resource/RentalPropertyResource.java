@@ -1,6 +1,7 @@
 package fr.rent.front.resource;
 
 import fr.rent.front.dto.request.RentalPropertyRequestDto;
+import fr.rent.front.dto.request.patch.RentalPropertyRequestDtoPatch;
 import fr.rent.front.service.RentalPropertyService;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.*;
@@ -42,6 +43,14 @@ public class RentalPropertyResource {
     @PUT
     public Response updateRentalProperty(RentalPropertyRequestDto rentalPropertyRequestDto, @PathParam("id") String id) {
         rentalPropertyService.updateRentalProperty(id, rentalPropertyRequestDto);
+        return Response.status(200)
+                .build();
+    }
+
+    @Path("/{id}")
+    @PATCH
+    public Response patchRentalProperty(RentalPropertyRequestDtoPatch rentalPropertyRequestDtoPatch, @PathParam("id") String id) {
+        rentalPropertyService.patchRentalProperty(id, rentalPropertyRequestDtoPatch);
         return Response.status(200)
                 .build();
     }
