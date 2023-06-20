@@ -7,12 +7,14 @@ import fr.rent.front.exception.NotFoundRentalPropertyException;
 import fr.rent.front.mapper.RentalPropertyMapper;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
+import org.eclipse.microprofile.config.inject.ConfigProperty;
 
 import java.io.IOException;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.util.Map;
 
 import static java.net.http.HttpRequest.BodyPublishers;
 import static java.net.http.HttpRequest.newBuilder;
@@ -20,11 +22,15 @@ import static java.net.http.HttpRequest.newBuilder;
 @ApplicationScoped
 public class RentalPropertyApiClient {
 
-    private static final String GLOBAL_RENTAL_PROPERTIES_API = "http://localhost:8081/rent-properties-api/rental-properties";
+    @Inject
+    @ConfigProperty(name="rental-properties-api-host")
+    private String rental_propertie_api_host;
 
     private final HttpClient httpClient;
 
     private RentalPropertyMapper rentalPropertyMapper;
+
+    private Map<String, String> env = System.getenv();
 
     @Inject
     public RentalPropertyApiClient() {
@@ -34,7 +40,7 @@ public class RentalPropertyApiClient {
 
     public String fetchRentalProperties() {
         HttpRequest request = newBuilder()
-                .uri(URI.create(GLOBAL_RENTAL_PROPERTIES_API))
+                .uri(URI.create(rental_propertie_api_host))
                 .GET()
                 .build();
 
@@ -47,7 +53,7 @@ public class RentalPropertyApiClient {
 
     public String fetchRentalProperty(String id) {
         HttpRequest request = newBuilder()
-                .uri(URI.create(GLOBAL_RENTAL_PROPERTIES_API + "/%s".formatted(id)))
+                .uri(URI.create(rental_propertie_api_host + "/%s".formatted(id)))
                 .GET()
                 .build();
 
@@ -68,7 +74,7 @@ public class RentalPropertyApiClient {
         var rentalPropertyRequestDtoMapped = rentalPropertyMapper.mapToBodyRequest(rentalPropertyRequestDto);
 
         HttpRequest request = newBuilder()
-                .uri(URI.create(GLOBAL_RENTAL_PROPERTIES_API))
+                .uri(URI.create(rental_propertie_api_host))
                 .header("Content-Type", "application/json")
                 .POST(BodyPublishers.ofString(rentalPropertyRequestDtoMapped))
                 .build();
@@ -89,7 +95,7 @@ public class RentalPropertyApiClient {
         var rentalPropertyRequestDtoMapped = rentalPropertyMapper.mapToBodyRequest(rentalPropertyRequestDto);
 
         HttpRequest request = newBuilder()
-                .uri(URI.create(GLOBAL_RENTAL_PROPERTIES_API + "/%s".formatted(id)))
+                .uri(URI.create(rental_propertie_api_host + "/%s".formatted(id)))
                 .header("Content-Type", "application/json")
                 .PUT(BodyPublishers.ofString(rentalPropertyRequestDtoMapped))
                 .build();
@@ -110,7 +116,7 @@ public class RentalPropertyApiClient {
         var rentalPropertyRequestPatchDtoMapped = rentalPropertyMapper.mapToBodyRequestPatch(rentalPropertyRequestDtoPatch);
 
         HttpRequest request = newBuilder()
-                .uri(URI.create(GLOBAL_RENTAL_PROPERTIES_API + "/%s".formatted(id)))
+                .uri(URI.create(rental_propertie_api_host + "/%s".formatted(id)))
                 .header("Content-Type", "application/json")
                 .method("PATCH", BodyPublishers.ofString(rentalPropertyRequestPatchDtoMapped))
                 .build();
@@ -131,7 +137,7 @@ public class RentalPropertyApiClient {
 
     public void deleteRentalProperty(String id) {
         HttpRequest request = newBuilder()
-                .uri(URI.create(GLOBAL_RENTAL_PROPERTIES_API + "/%s".formatted(id)))
+                .uri(URI.create(rental_propertie_api_host + "/%s".formatted(id)))
                 .DELETE()
                 .build();
 
