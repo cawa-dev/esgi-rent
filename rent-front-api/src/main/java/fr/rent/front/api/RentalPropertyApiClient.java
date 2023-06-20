@@ -30,8 +30,6 @@ public class RentalPropertyApiClient {
 
     private RentalPropertyMapper rentalPropertyMapper;
 
-    private Map<String, String> env = System.getenv();
-
     @Inject
     public RentalPropertyApiClient() {
         this.httpClient = HttpClient.newHttpClient();
