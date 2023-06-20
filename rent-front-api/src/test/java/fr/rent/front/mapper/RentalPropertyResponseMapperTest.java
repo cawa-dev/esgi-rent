@@ -1,5 +1,7 @@
 package fr.rent.front.mapper;
 
+import fr.rent.front.dto.request.RentalPropertyRequestDto;
+import fr.rent.front.dto.request.patch.RentalPropertyRequestDtoPatch;
 import fr.rent.front.dto.response.RentalPropertyResponseDto;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -34,15 +36,6 @@ class RentalPropertyMapperTest {
     }
 
     @Test
-    void shouldNotListMapToResponse() throws IOException {
-        // GIVEN
-        String InvalidListRentalPropertyStringResponse = manyInvalidRentalPropertiesStringResponseDto();
-
-        // WHEN & THEN
-        assertThrows(IOException.class, () -> rentalPropertyMapper.mapToResponse(InvalidListRentalPropertyStringResponse));
-    }
-
-    @Test
     void shouldMapToResponse() throws IOException {
         // GIVEN
         RentalPropertyResponseDto expectedRentalPropertyResponseDto = oneRentalPropertyResponseDto();
@@ -56,11 +49,28 @@ class RentalPropertyMapperTest {
     }
 
     @Test
-    void shouldNotMapToResponse() throws IOException {
+    void shouldMapToBodyRequest(){
         // GIVEN
-        String InvalidRentalPropertyStringResponse = oneInvalidRentalPropertyStringResponseDto();
+        RentalPropertyRequestDto rentalPropertyRequestDto = oneRentalPropertyRequestDto();
+        String expectedRentalPropertyStringRequest = oneValidRentalPropertyStringRequestDto();
 
-        // WHEN & THEN
-        assertThrows(IOException.class, () -> rentalPropertyMapper.mapToResponse(InvalidRentalPropertyStringResponse));
+        // WHEN
+        String actualRentalPropertyRequestDto = rentalPropertyMapper.mapToBodyRequest(rentalPropertyRequestDto);
+
+        // THEN
+        assertThat(actualRentalPropertyRequestDto).isEqualTo(expectedRentalPropertyStringRequest);
+    }
+
+    @Test
+    void shouldMapToBodyPatch(){
+        // GIVEN
+        RentalPropertyRequestDtoPatch rentalPropertyRequestDto = oneRentalPropertyRequestDtoPatch();
+        String expectedRentalPropertyStringRequestDtoPatch = oneRentalPropertyStringRequestDtoPatch();
+
+        // WHEN
+        String actualRentalPropertyRequestDto = rentalPropertyMapper.mapToBodyRequestPatch(rentalPropertyRequestDto);
+
+        // THEN
+        assertThat(actualRentalPropertyRequestDto).isEqualTo(expectedRentalPropertyStringRequestDtoPatch);
     }
 }

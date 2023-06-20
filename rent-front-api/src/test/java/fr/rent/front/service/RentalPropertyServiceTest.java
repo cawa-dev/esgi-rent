@@ -1,6 +1,8 @@
 package fr.rent.front.service;
 
 import fr.rent.front.api.RentalPropertyApiClient;
+import fr.rent.front.dto.request.RentalPropertyRequestDto;
+import fr.rent.front.dto.request.patch.RentalPropertyRequestDtoPatch;
 import fr.rent.front.dto.response.RentalPropertyResponseDto;
 import fr.rent.front.exception.NotFoundRentalPropertyException;
 import fr.rent.front.mapper.RentalPropertyMapper;
@@ -77,16 +79,57 @@ class RentalPropertyServiceTest {
     void shouldThrowNotFoundRentalPropertyExceptionWhenRentalPropertyIsNotFound() throws IOException, InterruptedException {
         // GIVEN
         String id = "9999";
-        var throwable = new IOException("Error when fetching rental property");
+        String errorMessage = "Le bien immobilier avec l'id : " + id + " est introuvable";
 
         // WHEN
-        when(rentalPropertyApiClient.fetchRentalProperty(id)).thenThrow(throwable);
+        when(rentalPropertyApiClient.fetchRentalProperty(id)).thenThrow(new NotFoundRentalPropertyException(errorMessage));
 
         // THEN
         assertThatExceptionOfType(NotFoundRentalPropertyException.class)
                 .isThrownBy(() -> rentalPropertyService.getRentalProperty(id))
-                .withMessage("Le bien immobilier avec l'id : " + id + " est introuvable");
+                .withMessage(errorMessage);
         verifyNoInteractions(rentalPropertyMapper);
     }
 
+    @Test
+    void shouldCreateRentalProperty() {
+        // GIVEN
+        RentalPropertyRequestDto rentalPropertyRequestDto = RentalPropertyResponseDtoSample.oneRentalPropertyRequestDto();
+
+        // WHEN
+        rentalPropertyService.createRentalProperty(rentalPropertyRequestDto);
+
+        // THEN
+        verify(rentalPropertyApiClient).postRentalProperty(rentalPropertyRequestDto);
+        verifyNoMoreInteractions(rentalPropertyApiClient, rentalPropertyMapper);
+    }
+
+    @Test
+    void shouldUpdateRentalProperty() {
+        // GIVEN
+        String id = "77";
+        RentalPropertyRequestDto rentalPropertyRequestDto = RentalPropertyResponseDtoSample.oneRentalPropertyRequestDto();
+
+        // WHEN
+        rentalPropertyService.updateRentalProperty(id, rentalPropertyRequestDto);
+
+        // THEN
+        verify(rentalPropertyApiClient).putRentalProperty(id, rentalPropertyRequestDto);
+        verifyNoMoreInteractions(rentalPropertyApiClient, rentalPropertyMapper);
+    }
+
+    @Test
+    void shouldPatchRentalProperty() {
+        // GIVEN
+        String id = "77";
+        RentalPropertyRequestDto rentalPropertyRequestDto = RentalPropertyResponseDtoSample.oneRentalPropertyRequestDto();
+        RentalPropertyRequestDtoPatch rentalPropertyRequestDtoPatch = new RentalPropertyRequestDtoPatch(rentalPropertyRequestDto.rentAmount());
+
+        // WHEN
+        rentalPropertyService.patchRentalProperty(id, rentalPropertyRequestDtoPatch);
+
+        // THEN
+        verify(rentalPropertyApiClient).patchRentalProperty(id, rentalPropertyRequestDtoPatch);
+        verifyNoMoreInteractions(rentalPropertyApiClient, rentalPropertyMapper);
+    }
 }
