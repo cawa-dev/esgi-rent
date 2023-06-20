@@ -33,7 +33,7 @@ public class RentalCarResource {
     }
 
     @POST
-    public Response createRentalCary(RentalCarRequestDto rentalCarRequestDto) {
+    public Response createRentalCar(RentalCarRequestDto rentalCarRequestDto) {
         rentalCarService.createRentalCar(rentalCarRequestDto);
         return Response.status(201)
                 .build();
