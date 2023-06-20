@@ -128,4 +128,18 @@ public class RentalPropertyApiClient {
             throw new RuntimeException(exception);
         }
     }
+
+    public void deleteRentalProperty(String id) {
+        HttpRequest request = newBuilder()
+                .uri(URI.create(GLOBAL_RENTAL_PROPERTIES_API + "/%s".formatted(id)))
+                .DELETE()
+                .build();
+
+        try {
+            httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+
+        } catch (IOException | InterruptedException exception) {
+            throw new RuntimeException(exception);
+        }
+    }
 }

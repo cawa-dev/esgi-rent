@@ -40,4 +40,8 @@ public class RentalPropertyService {
     public void patchRentalProperty(String id, RentalPropertyRequestDtoPatch rentalPropertyRequestDtoPatch) {
         apiClient.patchRentalProperty(id, rentalPropertyRequestDtoPatch);
     }
+
+    public void deleteRentalProperty(String id) {
+        apiClient.deleteRentalProperty(id);
+    }
 }

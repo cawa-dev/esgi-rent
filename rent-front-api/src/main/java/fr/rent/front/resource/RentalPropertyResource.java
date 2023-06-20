@@ -54,4 +54,12 @@ public class RentalPropertyResource {
         return Response.status(200)
                 .build();
     }
+
+    @Path("/{id}")
+    @DELETE
+    public Response deleteRentalProperty(@PathParam("id") String id) {
+        rentalPropertyService.deleteRentalProperty(id);
+        return Response.status(204)
+                .build();
+    }
 }
