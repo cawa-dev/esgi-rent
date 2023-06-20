@@ -2,15 +2,14 @@ package fr.rent.front.mapper;
 
 
 import fr.rent.front.exception.NotFoundRentalPropertyException;
+import jakarta.ws.rs.core.Response;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import jakarta.ws.rs.core.Response;
-import static jakarta.ws.rs.core.MediaType.APPLICATION_JSON;
-
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class RentalPropertyNotFoundExceptionMapperTest {
+
     RentalPropertyNotFoundExceptionMapper rentalPropertyNotFoundExceptionMapper;
 
     @BeforeEach

@@ -1,24 +1,24 @@
 package fr.rent.front.mapper;
 
-import fr.rent.front.dto.RentalPropertyResponseDto;
+import fr.rent.front.dto.response.RentalPropertyResponseDto;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 import java.util.List;
 
+import static fr.rent.front.samples.RentalPropertyResponseDtoSample.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static fr.rent.front.samples.RentalPropertyResponseDtoSample.*;
 
-class RentalPropertyResponseMapperTest {
-    RentalPropertyResponseMapper rentalPropertyMapper;
+class RentalPropertyMapperTest {
+
+    RentalPropertyMapper rentalPropertyMapper;
 
     @BeforeEach
     void setUp() {
-        rentalPropertyMapper = new RentalPropertyResponseMapper();
+        rentalPropertyMapper = new RentalPropertyMapper();
     }
-
 
     @Test
     void shouldMapToListResponse() throws IOException {

@@ -1,9 +1,9 @@
 package fr.rent.front.service;
 
 import fr.rent.front.api.RentalPropertyApiClient;
-import fr.rent.front.dto.RentalPropertyResponseDto;
+import fr.rent.front.dto.response.RentalPropertyResponseDto;
 import fr.rent.front.exception.NotFoundRentalPropertyException;
-import fr.rent.front.mapper.RentalPropertyResponseMapper;
+import fr.rent.front.mapper.RentalPropertyMapper;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -25,7 +25,7 @@ class RentalPropertyServiceTest {
     RentalPropertyService rentalPropertyService;
 
     @Mock
-    RentalPropertyResponseMapper rentalPropertyResponseMapper;
+    RentalPropertyMapper rentalPropertyMapper;
 
     @Mock
     RentalPropertyApiClient rentalPropertyApiClient;
@@ -38,7 +38,7 @@ class RentalPropertyServiceTest {
 
         // WHEN
         when(rentalPropertyApiClient.fetchRentalProperties()).thenReturn(rentalPropertyApiResponse);
-        when(rentalPropertyResponseMapper.mapToListResponse(rentalPropertyApiResponse)).thenReturn(rentalPropertyResponseList);
+        when(rentalPropertyMapper.mapToListResponse(rentalPropertyApiResponse)).thenReturn(rentalPropertyResponseList);
 
         List<RentalPropertyResponseDto> rentalProperties = rentalPropertyService.getRentalProperties();
 
@@ -47,8 +47,8 @@ class RentalPropertyServiceTest {
                 .usingRecursiveComparison()
                 .isEqualTo(rentalPropertyResponseList);
         verify(rentalPropertyApiClient).fetchRentalProperties();
-        verify(rentalPropertyResponseMapper).mapToListResponse(rentalPropertyApiResponse);
-        verifyNoMoreInteractions(rentalPropertyApiClient, rentalPropertyResponseMapper);
+        verify(rentalPropertyMapper).mapToListResponse(rentalPropertyApiResponse);
+        verifyNoMoreInteractions(rentalPropertyApiClient, rentalPropertyMapper);
     }
 
     @Test
@@ -60,7 +60,7 @@ class RentalPropertyServiceTest {
 
         // WHEN
         when(rentalPropertyApiClient.fetchRentalProperty(id)).thenReturn(rentalPropertyApiResponse);
-        when(rentalPropertyResponseMapper.mapToResponse(rentalPropertyApiResponse)).thenReturn(rentalPropertyResponse);
+        when(rentalPropertyMapper.mapToResponse(rentalPropertyApiResponse)).thenReturn(rentalPropertyResponse);
 
         RentalPropertyResponseDto rentalProperty = rentalPropertyService.getRentalProperty(id);
 
@@ -69,8 +69,8 @@ class RentalPropertyServiceTest {
                 .usingRecursiveComparison()
                 .isEqualTo(rentalPropertyResponse);
         verify(rentalPropertyApiClient).fetchRentalProperty(id);
-        verify(rentalPropertyResponseMapper).mapToResponse(rentalPropertyApiResponse);
-        verifyNoMoreInteractions(rentalPropertyApiClient, rentalPropertyResponseMapper);
+        verify(rentalPropertyMapper).mapToResponse(rentalPropertyApiResponse);
+        verifyNoMoreInteractions(rentalPropertyApiClient, rentalPropertyMapper);
     }
 
     @Test
@@ -86,7 +86,7 @@ class RentalPropertyServiceTest {
         assertThatExceptionOfType(NotFoundRentalPropertyException.class)
                 .isThrownBy(() -> rentalPropertyService.getRentalProperty(id))
                 .withMessage("Le bien immobilier avec l'id : " + id + " est introuvable");
-        verifyNoInteractions(rentalPropertyResponseMapper);
+        verifyNoInteractions(rentalPropertyMapper);
     }
 
 }

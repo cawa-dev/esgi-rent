@@ -1,11 +1,11 @@
 package fr.rent.front.samples;
 
-import fr.rent.front.dto.RentalPropertyResponseDto;
+import fr.rent.front.dto.response.RentalPropertyResponseDto;
 
 import java.util.List;
 
 public class RentalPropertyResponseDtoSample {
-    public static List<RentalPropertyResponseDto> manyRentalPropertiesResponseDto(){
+    public static List<RentalPropertyResponseDto> manyRentalPropertiesResponseDto() {
         return List.of(
                 new RentalPropertyResponseDto(
                         "77 Rue des roses",
@@ -29,7 +29,7 @@ public class RentalPropertyResponseDtoSample {
 
     }
 
-    public static String manyValidRentalPropertiesStringResponseDto(){
+    public static String manyValidRentalPropertiesStringResponseDto() {
         return "[\n" +
                 "  {\n" +
                 "    \"address\": \"77 Rue des roses\",\n" +
@@ -52,7 +52,7 @@ public class RentalPropertyResponseDtoSample {
                 "]";
     }
 
-    public static String manyInvalidRentalPropertiesStringResponseDto(){
+    public static String manyInvalidRentalPropertiesStringResponseDto() {
         return "    \"address\": \"77 Rue des roses\",\n" +
                 "    \"area\": 37.48,\n" +
                 "    \"description\": \"Appartement spacieux avec vue sur l'ESGI\",\n" +
@@ -73,7 +73,7 @@ public class RentalPropertyResponseDtoSample {
                 "]";
     }
 
-    public static RentalPropertyResponseDto oneRentalPropertyResponseDto(){
+    public static RentalPropertyResponseDto oneRentalPropertyResponseDto() {
         return new RentalPropertyResponseDto(
                 "77 Rue des roses",
                 37.48,
@@ -85,7 +85,7 @@ public class RentalPropertyResponseDtoSample {
         );
     }
 
-    public static String oneValidRentalPropertyStringResponseDto(){
+    public static String oneValidRentalPropertyStringResponseDto() {
         return "{\n" +
                 "  \"address\": \"77 Rue des roses\",\n" +
                 "  \"area\": 37.48,\n" +
@@ -97,7 +97,7 @@ public class RentalPropertyResponseDtoSample {
                 "}";
     }
 
-    public static String oneInvalidRentalPropertyStringResponseDto(){
+    public static String oneInvalidRentalPropertyStringResponseDto() {
         return "  \"address\": \"77 Rue des roses\",\n" +
                 "  \"area\": 37.48,\n" +
                 "  \"description\": \"Appartement spacieux avec vue sur l'ESGI\",\n" +

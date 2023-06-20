@@ -1,4 +1,4 @@
-package fr.rent.front.dto;
+package fr.rent.front.dto.response;
 
 public record RentalPropertyResponseDto(
         String address,
