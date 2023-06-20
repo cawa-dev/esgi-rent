@@ -83,4 +83,25 @@ public class RentalPropertyApiClient {
             throw new RuntimeException(exception);
         }
     }
+
+    public void putRentalProperty(String id, RentalPropertyRequestDto rentalPropertyRequestDto) {
+        var rentalPropertyRequestDtoMapped = rentalPropertyMapper.mapToBody(rentalPropertyRequestDto);
+
+        HttpRequest request = newBuilder()
+                .uri(URI.create(GLOBAL_RENTAL_PROPERTIES_API + "/%s".formatted(id)))
+                .header("Content-Type", "application/json")
+                .PUT(BodyPublishers.ofString(rentalPropertyRequestDtoMapped))
+                .build();
+
+        try {
+            HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+
+            if (response.statusCode() != 200) {
+                throw new InvalidRequestRentalPropertyException("La requête est invalide !");
+            }
+
+        } catch (IOException | InterruptedException exception) {
+            throw new RuntimeException(exception);
+        }
+    }
 }

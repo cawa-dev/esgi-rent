@@ -31,4 +31,8 @@ public class RentalPropertyService {
     public void createRentalProperty(RentalPropertyRequestDto rentalPropertyRequestDto) {
         apiClient.postRentalProperty(rentalPropertyRequestDto);
     }
+
+    public void updateRentalProperty(String id, RentalPropertyRequestDto rentalPropertyRequestDto) {
+        apiClient.putRentalProperty(id, rentalPropertyRequestDto);
+    }
 }
