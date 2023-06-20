@@ -1,10 +1,10 @@
 package fr.rent.front.api;
 
-import fr.rent.front.dto.request.RentalPropertyRequestDto;
-import fr.rent.front.dto.request.patch.RentalPropertyRequestDtoPatch;
-import fr.rent.front.exception.InvalidRequestRentalPropertyException;
-import fr.rent.front.exception.NotFoundRentalPropertyException;
-import fr.rent.front.mapper.RentalPropertyMapper;
+import fr.rent.front.dto.request.RentalCarRequestDto;
+import fr.rent.front.dto.request.patch.RentalCarRequestDtoPatch;
+import fr.rent.front.exception.InvalidRequestRentalCarException;
+import fr.rent.front.exception.NotFoundRentalCarException;
+import fr.rent.front.mapper.RentalCarMapper;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
@@ -19,25 +19,25 @@ import static java.net.http.HttpRequest.BodyPublishers;
 import static java.net.http.HttpRequest.newBuilder;
 
 @ApplicationScoped
-public class RentalPropertyApiClient {
+public class RentalCarApiClient {
 
     @Inject
-    @ConfigProperty(name = "rental-properties-api-host")
-    private String rental_properties_api_host;
+    @ConfigProperty(name = "rental-cars-api-host")
+    private String rental_cars_api_host;
 
     private final HttpClient httpClient;
 
-    private RentalPropertyMapper rentalPropertyMapper;
+    private RentalCarMapper rentalCarMapper;
 
     @Inject
-    public RentalPropertyApiClient() {
+    public RentalCarApiClient() {
         this.httpClient = HttpClient.newHttpClient();
-        this.rentalPropertyMapper = new RentalPropertyMapper();
+        this.rentalCarMapper = new RentalCarMapper();
     }
 
-    public String fetchRentalProperties() {
+    public String fetchRentalCars() {
         HttpRequest request = newBuilder()
-                .uri(URI.create(rental_properties_api_host))
+                .uri(URI.create(rental_cars_api_host))
                 .GET()
                 .build();
 
@@ -48,9 +48,9 @@ public class RentalPropertyApiClient {
         }
     }
 
-    public String fetchRentalProperty(String id) {
+    public String fetchRentalCar(String id) {
         HttpRequest request = newBuilder()
-                .uri(URI.create(rental_properties_api_host + "/%s".formatted(id)))
+                .uri(URI.create(rental_cars_api_host + "/%s".formatted(id)))
                 .GET()
                 .build();
 
@@ -58,7 +58,7 @@ public class RentalPropertyApiClient {
             HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
 
             if (response.statusCode() != 200) {
-                throw new NotFoundRentalPropertyException("Le bien immobilier avec l'id : %s est introuvable".formatted(id));
+                throw new NotFoundRentalCarException("Le véhicule avec l'id : %s est introuvable".formatted(id));
             }
 
             return response.body();
@@ -67,20 +67,20 @@ public class RentalPropertyApiClient {
         }
     }
 
-    public void postRentalProperty(RentalPropertyRequestDto rentalPropertyRequestDto) {
-        var rentalPropertyRequestDtoMapped = rentalPropertyMapper.mapToBodyRequest(rentalPropertyRequestDto);
+    public void postRentalCar(RentalCarRequestDto rentalCarRequestDto) {
+        var rentalCarRequestDtoMapped = rentalCarMapper.mapToBodyRequest(rentalCarRequestDto);
 
         HttpRequest request = newBuilder()
-                .uri(URI.create(rental_properties_api_host))
+                .uri(URI.create(rental_cars_api_host))
                 .header("Content-Type", "application/json")
-                .POST(BodyPublishers.ofString(rentalPropertyRequestDtoMapped))
+                .POST(BodyPublishers.ofString(rentalCarRequestDtoMapped))
                 .build();
 
         try {
             HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
 
             if (response.statusCode() != 201) {
-                throw new InvalidRequestRentalPropertyException("La requête est invalide !");
+                throw new InvalidRequestRentalCarException("La requête est invalide !");
             }
 
         } catch (IOException | InterruptedException exception) {
@@ -88,20 +88,20 @@ public class RentalPropertyApiClient {
         }
     }
 
-    public void putRentalProperty(String id, RentalPropertyRequestDto rentalPropertyRequestDto) {
-        var rentalPropertyRequestDtoMapped = rentalPropertyMapper.mapToBodyRequest(rentalPropertyRequestDto);
+    public void putRentalCar(String id, RentalCarRequestDto rentalCarRequestDto) {
+        var rentalCarRequestDtoMapped = rentalCarMapper.mapToBodyRequest(rentalCarRequestDto);
 
         HttpRequest request = newBuilder()
-                .uri(URI.create(rental_properties_api_host + "/%s".formatted(id)))
+                .uri(URI.create(rental_cars_api_host + "/%s".formatted(id)))
                 .header("Content-Type", "application/json")
-                .PUT(BodyPublishers.ofString(rentalPropertyRequestDtoMapped))
+                .PUT(BodyPublishers.ofString(rentalCarRequestDtoMapped))
                 .build();
 
         try {
             HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
 
             if (response.statusCode() != 200) {
-                throw new InvalidRequestRentalPropertyException("La requête est invalide !");
+                throw new InvalidRequestRentalCarException("La requête est invalide !");
             }
 
         } catch (IOException | InterruptedException exception) {
@@ -109,13 +109,13 @@ public class RentalPropertyApiClient {
         }
     }
 
-    public void patchRentalProperty(String id, RentalPropertyRequestDtoPatch rentalPropertyRequestDtoPatch) {
-        var rentalPropertyRequestPatchDtoMapped = rentalPropertyMapper.mapToBodyRequestPatch(rentalPropertyRequestDtoPatch);
+    public void patchRentalCar(String id, RentalCarRequestDtoPatch rentalCarRequestDtoPatch) {
+        var rentalCarRequestPatchDtoMapped = rentalCarMapper.mapToBodyRequestPatch(rentalCarRequestDtoPatch);
 
         HttpRequest request = newBuilder()
-                .uri(URI.create(rental_properties_api_host + "/%s".formatted(id)))
+                .uri(URI.create(rental_cars_api_host + "/%s".formatted(id)))
                 .header("Content-Type", "application/json")
-                .method("PATCH", BodyPublishers.ofString(rentalPropertyRequestPatchDtoMapped))
+                .method("PATCH", BodyPublishers.ofString(rentalCarRequestPatchDtoMapped))
                 .build();
 
         try {
@@ -123,8 +123,8 @@ public class RentalPropertyApiClient {
 
             switch (response.statusCode()) {
                 case 404 ->
-                        throw new NotFoundRentalPropertyException("Le bien immobilier avec l'id : %s est introuvable".formatted(id));
-                case 400 -> throw new InvalidRequestRentalPropertyException("La requête est invalide !");
+                        throw new NotFoundRentalCarException("Le véhicule avec l'id : %s est introuvable".formatted(id));
+                case 400 -> throw new InvalidRequestRentalCarException("La requête est invalide !");
             }
 
         } catch (IOException | InterruptedException exception) {
@@ -132,9 +132,9 @@ public class RentalPropertyApiClient {
         }
     }
 
-    public void deleteRentalProperty(String id) {
+    public void deleteRentalCar(String id) {
         HttpRequest request = newBuilder()
-                .uri(URI.create(rental_properties_api_host + "/%s".formatted(id)))
+                .uri(URI.create(rental_cars_api_host + "/%s".formatted(id)))
                 .DELETE()
                 .build();
 
