@@ -1,12 +1,11 @@
 package fr.rent.front.resource;
 
-import fr.rent.front.dto.RentalPropertyResponseDto;
+import fr.rent.front.dto.request.RentalPropertyRequestDto;
+import fr.rent.front.dto.request.patch.RentalPropertyRequestDtoPatch;
 import fr.rent.front.service.RentalPropertyService;
 import jakarta.inject.Inject;
-import jakarta.ws.rs.GET;
-import jakarta.ws.rs.Path;
-
-import java.util.List;
+import jakarta.ws.rs.*;
+import jakarta.ws.rs.core.Response;
 
 @Path("/rental-properties")
 public class RentalPropertyResource {
@@ -19,7 +18,48 @@ public class RentalPropertyResource {
     }
 
     @GET
-    public List<RentalPropertyResponseDto> getRentalProperties() {
-        return rentalPropertyService.getRentalProperties();
+    public Response getRentalProperties() {
+        return Response.ok()
+                .entity(rentalPropertyService.getRentalProperties())
+                .build();
+    }
+
+    @Path("/{id}")
+    @GET
+    public Response getRentalProperty(@PathParam("id") String id) {
+        return Response.ok()
+                .entity(rentalPropertyService.getRentalProperty(id))
+                .build();
+    }
+
+    @POST
+    public Response createRentalProperty(RentalPropertyRequestDto rentalPropertyRequestDto) {
+        rentalPropertyService.createRentalProperty(rentalPropertyRequestDto);
+        return Response.status(201)
+                .build();
+    }
+
+    @Path("/{id}")
+    @PUT
+    public Response updateRentalProperty(RentalPropertyRequestDto rentalPropertyRequestDto, @PathParam("id") String id) {
+        rentalPropertyService.updateRentalProperty(id, rentalPropertyRequestDto);
+        return Response.status(200)
+                .build();
+    }
+
+    @Path("/{id}")
+    @PATCH
+    public Response patchRentalProperty(RentalPropertyRequestDtoPatch rentalPropertyRequestDtoPatch, @PathParam("id") String id) {
+        rentalPropertyService.patchRentalProperty(id, rentalPropertyRequestDtoPatch);
+        return Response.status(200)
+                .build();
+    }
+
+    @Path("/{id}")
+    @DELETE
+    public Response deleteRentalProperty(@PathParam("id") String id) {
+        rentalPropertyService.deleteRentalProperty(id);
+        return Response.status(204)
+                .build();
     }
 }

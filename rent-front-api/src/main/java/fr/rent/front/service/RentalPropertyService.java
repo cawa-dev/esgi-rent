@@ -1,48 +1,47 @@
 package fr.rent.front.service;
 
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import fr.rent.front.dto.RentalPropertyResponseDto;
+import fr.rent.front.api.RentalPropertyApiClient;
+import fr.rent.front.dto.request.RentalPropertyRequestDto;
+import fr.rent.front.dto.request.patch.RentalPropertyRequestDtoPatch;
+import fr.rent.front.dto.response.RentalPropertyResponseDto;
+import fr.rent.front.mapper.RentalPropertyMapper;
 import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
 
-import java.net.URI;
-import java.net.http.HttpClient;
-import java.net.http.HttpRequest;
-import java.net.http.HttpResponse;
 import java.util.List;
 
 @ApplicationScoped
 public class RentalPropertyService {
 
+    @Inject
+    private RentalPropertyApiClient apiClient;
+
+    @Inject
+    private RentalPropertyMapper responseMapper;
+
     public List<RentalPropertyResponseDto> getRentalProperties() {
-        HttpClient httpClient = HttpClient.newHttpClient();
+        String responseBody = apiClient.fetchRentalProperties();
+        return responseMapper.mapToListResponse(responseBody);
+    }
 
-        HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create("http://localhost:8081/rent-properties-api/rental-properties"))
-                .GET()
-                .build();
+    public RentalPropertyResponseDto getRentalProperty(String id) {
+        String responseBody = apiClient.fetchRentalProperty(id);
+        return responseMapper.mapToResponse(responseBody);
+    }
 
-        try {
-            HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+    public void createRentalProperty(RentalPropertyRequestDto rentalPropertyRequestDto) {
+        apiClient.postRentalProperty(rentalPropertyRequestDto);
+    }
 
-            int statusCode = response.statusCode();
-            String responseBody = response.body();
+    public void updateRentalProperty(String id, RentalPropertyRequestDto rentalPropertyRequestDto) {
+        apiClient.putRentalProperty(id, rentalPropertyRequestDto);
+    }
 
-            if (statusCode == 200) {
-                ObjectMapper objectMapper = new ObjectMapper();
-                List<RentalPropertyResponseDto> rentalProperties = objectMapper.readValue(
-                        responseBody,
-                        new TypeReference<>() {
-                        }
-                );
-                return rentalProperties;
-            } else {
-                System.err.println("Error response received. Status code: " + statusCode);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+    public void patchRentalProperty(String id, RentalPropertyRequestDtoPatch rentalPropertyRequestDtoPatch) {
+        apiClient.patchRentalProperty(id, rentalPropertyRequestDtoPatch);
+    }
 
-        return null;
+    public void deleteRentalProperty(String id) {
+        apiClient.deleteRentalProperty(id);
     }
 }
