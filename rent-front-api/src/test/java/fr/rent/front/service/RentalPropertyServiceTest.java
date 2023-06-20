@@ -6,6 +6,7 @@ import fr.rent.front.dto.request.patch.RentalPropertyRequestDtoPatch;
 import fr.rent.front.dto.response.RentalPropertyResponseDto;
 import fr.rent.front.exception.NotFoundRentalPropertyException;
 import fr.rent.front.mapper.RentalPropertyMapper;
+import fr.rent.front.samples.RentalPropertyResponseDtoSample;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
